@@ -1,6 +1,8 @@
 project:
   type: website
-
+  output-dir: docs
+  # ~ additional metadata excluded for brevity ~
+  
 website:
   title: "morganl06.github.io"
   navbar:
@@ -18,4 +20,3 @@ format:
     toc: true
 
 editor: visual
-
