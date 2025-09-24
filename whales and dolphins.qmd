@@ -7,7 +7,9 @@ date: September 21, 2025
 format: html
 ---
 
-```{r, echo = FALSE}
+This dataset compiles all Cetacean species and their birth information: their birth year, sex, location, mother, father, status, etc. This plot shows the total births per year by species.
+
+```{r, echo = FALSE, warning = FALSE, message = FALSE}
 
 library(dplyr)
 library(ggplot2)
@@ -31,4 +33,6 @@ allCetaceanData |>
 
 The Cetacean dataset I worked with comes from the TidyTuesday database.
 
-<https://github.com/rfordatascience/tidytuesday/blob/main/data/2018/2018-12-18/allCetaceanData.csv>
+\[link\] <https://github.com/rfordatascience/tidytuesday/blob/main/data/2018/2018-12-18/allCetaceanData.csv>
+
+The original data set was made by Tom Mock.

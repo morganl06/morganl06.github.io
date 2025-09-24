@@ -18,13 +18,13 @@
     "href": "whales and dolphins.html",
     "title": "Cetacean species",
     "section": "",
-    "text": "Attaching package: 'dplyr'\n\n\nThe following objects are masked from 'package:stats':\n\n    filter, lag\n\n\nThe following objects are masked from 'package:base':\n\n    intersect, setdiff, setequal, union\n\n\nNew names:\nRows: 2194 Columns: 22\n── Column specification\n──────────────────────────────────────────────────────── Delimiter: \",\" chr\n(16): species, id, name, sex, accuracy, acquisition, originLocation, mo... dbl\n(2): ...1, birthYear date (4): originDate, statusDate, transferDate, entryDate\nℹ Use `spec()` to retrieve the full column specification for this data. ℹ\nSpecify the column types or set `show_col_types = FALSE` to quiet this message.\n• `` -&gt; `...1`"
+    "text": "This dataset compiles all Cetacean species and their birth information: their birth year, sex, location, mother, father, status, etc. This plot shows the total births per year by species.\n\n\n\n\n\n\n\n\n\nThe Cetacean dataset I worked with comes from the TidyTuesday database.\n[link] https://github.com/rfordatascience/tidytuesday/blob/main/data/2018/2018-12-18/allCetaceanData.csv\nThe original data set was made by Tom Mock."
   },
   {
     "objectID": "seasons.html",
     "href": "seasons.html",
     "title": "American Idol Seasons",
     "section": "",
-    "text": "Attaching package: 'dplyr'\n\n\nThe following objects are masked from 'package:stats':\n\n    filter, lag\n\n\nThe following objects are masked from 'package:base':\n\n    intersect, setdiff, setequal, union\n\n\nRows: 18 Columns: 10\n── Column specification ────────────────────────────────────────────────────────\nDelimiter: \",\"\nchr (8): winner, runner_up, original_release, original_network, hosted_by, j...\ndbl (2): season, no_of_episodes\n\nℹ Use `spec()` to retrieve the full column specification for this data.\nℹ Specify the column types or set `show_col_types = FALSE` to quiet this message.\n\n\n\n\n\n\n\n\n\nThe American Idol dataset I worked with comes from the TidyTuesday database.\nhttps://github.com/rfordatascience/tidytuesday/blob/main/data/2024/2024-07-23/seasons.csv"
+    "text": "This dataset compiles the American idol winners and runner ups of the first 18 seasons, as well as release date, judges’ names, finals venue, number of episodes of the season, and original network and host. This plot compares judges’ appearance across all seasons.\n\n\n\n\n\n\n\n\n\nThe American Idol dataset I worked with comes from the TidyTuesday database.\n[link] https://github.com/rfordatascience/tidytuesday/blob/main/data/2024/2024-07-23/seasons.csv\nThe original dataset was made by Tracy Teal and Jon Harmon."
   }
 ]

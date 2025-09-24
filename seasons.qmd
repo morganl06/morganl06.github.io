@@ -7,7 +7,9 @@ date: September 21, 2025
 format: html
 ---
 
-```{r, echo = FALSE}
+This dataset compiles the American idol winners and runner ups of the first 18 seasons, as well as release date, judges' names, finals venue, number of episodes of the season, and original network and host. This plot compares judges' appearance across all seasons. 
+
+```{r, echo = FALSE, warning = FALSE, message = FALSE}
 library(readr)
 library(dplyr)
 library(tidyr)
@@ -31,11 +33,11 @@ ggplot(judge_links, aes(x = factor(season), y = judges)) +
     y = "Judge"
   )
 ```
-
 The American Idol dataset I worked with comes from the TidyTuesday database. 
 
-https://github.com/rfordatascience/tidytuesday/blob/main/data/2024/2024-07-23/seasons.csv
+[link] <https://github.com/rfordatascience/tidytuesday/blob/main/data/2024/2024-07-23/seasons.csv>
 
+The original dataset was made by Tracy Teal and Jon Harmon. 
 
 
 
