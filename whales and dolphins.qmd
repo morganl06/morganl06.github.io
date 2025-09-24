@@ -1,0 +1,34 @@
+---
+title: "Cetacean species"
+description: Number of births by Cetacean species per year
+  
+author: Morgan L
+date: September 21, 2025
+format: html
+---
+
+```{r, echo = FALSE}
+
+library(dplyr)
+library(ggplot2)
+library(readr)
+
+allCetaceanData <- read_csv("allCetaceanData.csv")
+
+allCetaceanData |>
+  filter(!is.na(birthYear), birthYear >= 2000, birthYear <= 2020) |>
+  count(birthYear, species) |>
+  ggplot(aes(x = birthYear, y = n, fill = species)) +
+  geom_col(position = "stack") +
+  labs(
+    x = "Year",
+    y = "Number of Births",
+    title = "Cetacean Births by Species (2000–2020)"
+  ) +
+  scale_fill_viridis_d(option = "turbo") +   # better contrasting colors
+  theme_minimal()
+```
+
+The Cetacean dataset I worked with comes from the TidyTuesday database.
+
+<https://github.com/rfordatascience/tidytuesday/blob/main/data/2018/2018-12-18/allCetaceanData.csv>

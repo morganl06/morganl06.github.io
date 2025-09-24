@@ -9,12 +9,11 @@ about:
   links:
     - text: GitHub
       href: https://github.com/morganl06/morganl06.github.io
-    - text: Email
-      href: mjlm2024@mymail.pomona.edu
 ---
 
 This is a Quarto website.
 
 To learn more about Quarto websites visit <https://quarto.org/docs/websites>.
 
-hi
+Hi! This is my project for DS002! I'm interested in minoring in Data Science! Outside of academics, I play rugby and like to bake with friends. 
+

@@ -1,0 +1,45 @@
+---
+title: "American Idol Seasons"
+description:
+  Frequency of Judge appearances per season
+author: Morgan L
+date: September 21, 2025
+format: html
+---
+
+```{r, echo = FALSE}
+library(readr)
+library(dplyr)
+library(tidyr)
+library(ggplot2)
+
+seasons <- read_csv("seasons.csv")
+
+# Split judges into individual names
+judge_links <- seasons |>
+  select(season, judges) |>
+  separate_rows(judges, sep = "; ") |>
+  mutate(judges = trimws(judges))
+
+# Make a heatmap
+ggplot(judge_links, aes(x = factor(season), y = judges)) +
+  geom_tile(fill = "pink") +
+  theme_minimal() +
+  labs(
+    title = "Frequency of Judge appearance per season",
+    x = "Season",
+    y = "Judge"
+  )
+```
+
+The American Idol dataset I worked with comes from the TidyTuesday database. 
+
+https://github.com/rfordatascience/tidytuesday/blob/main/data/2024/2024-07-23/seasons.csv
+
+
+
+
+
+
+
+
