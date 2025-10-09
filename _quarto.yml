@@ -1,7 +1,7 @@
 project:
   type: website
   output-dir: docs
-
+  
   
 website:
   title: "Morgan L"
@@ -13,10 +13,12 @@ website:
       menu:
       - whales and dolphins.qmd
       - seasons.qmd
+      - project2.qmd
     - Resources.qmd
     
 format:
   html:
+    code-fold: true 
     theme:
       - yeti
     css: styles.css

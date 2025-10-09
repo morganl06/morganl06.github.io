@@ -33,6 +33,8 @@ allCetaceanData |>
 
 The Cetacean dataset I worked with comes from the TidyTuesday database.
 
-\[link\] <https://github.com/rfordatascience/tidytuesday/blob/main/data/2018/2018-12-18/allCetaceanData.csv>
+The original data set was made by Amber Thomas in her article for *The Pudding*.
 
-The original data set was made by Tom Mock.
+\[link\] [TidyTuesday (2018-12-18)](https://github.com/rfordatascience/tidytuesday/blob/main/data/2018/2018-12-18/readme.md)
+
+Thomas, Amber, Cetacean Insights: What We've Learned From Whales and Dolphins in Captivity. The Pudding 2017. <https://pudding.cool/2017/07/cetaceans/>
