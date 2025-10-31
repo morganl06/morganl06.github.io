@@ -1,0 +1,112 @@
+---
+title: "Diabetes simulation study"
+---
+
+```{r, warning = FALSE, message = FALSE}
+library(tidyverse)
+library(readr)
+global_mortality <- read_csv("global_mortality.csv")
+view(global_mortality)
+```
+
+This dataset presents the mortality rate for different diseases, per year (from 1990 to 2016) and per country. We are exploring the specific average rate of mortality from diabetes in the United States and in France across all years.
+
+<https://github.com/rfordatascience/tidytuesday/tree/main/data/2018/2018-04-16>
+
+The original data comes from an article entitled Causes of death and published in the Our World in Data magazine by Saloni Dattani, Fiona Spooner, Hannah Ritchie and Max Roser at the following link:
+
+Dattani, S., Spooner, F., Ritchie, H., & Roser, M. (2023). Causes of Death. *Our World in Data*. <https://ourworldindata.org/causes-of-death>
+
+In this simulation study, we will explore whether France and the United States have the same average diabetes mortality rate. We will first calculate the observed difference in mean diabetes mortality between the two countries across all available years (1990-2016). To test whether the difference we observe could have been a result of random distribution, we will run a permutation test shuffling the diabetes mortality percentage rates countries 1000 times, to create a null distribution.
+
+My research question is the following: do the United States and France have different mortality rates for diabetes on average from 1990 to 2006?
+
+The null hypothesis (Ho) is that France and the US have the same average mortality rates for diabetes from 1990-2016.
+
+The alternative hypothesis (Ha) is that France and the US have different average mortality rates for diabetes from 1990-2016.
+
+```{r, warning = FALSE, message = FALSE}
+
+library(dplyr)
+
+mortality_filtered <- global_mortality |>
+  filter(country %in% c("France", "United States")) |>
+  select(country, year, `Diabetes (%)`)
+
+
+mortality_filtered <- mortality_filtered |>
+  rename(diabetes_pct = `Diabetes (%)`)
+```
+
+```{r, warning = FALSE, message = FALSE}
+
+library(dplyr)
+library(ggplot2)
+library(readr)
+
+library(dplyr)
+
+mortality_avg <- mortality_filtered |>
+  group_by(country) |>
+  summarize(avg_diabetes = mean(`diabetes_pct`))
+
+mortality_avg
+
+
+
+ggplot(mortality_avg, aes(x = country, y = avg_diabetes, fill = country)) +
+  geom_col(show.legend = FALSE) +
+  labs(title = "Average Diabetes Mortality (%) Across All Years",
+       x = "Country",
+       y = "Average Diabetes Mortality (%)") +
+  theme_minimal()
+```
+
+We observe a difference in average mortality rate between the two countries, so now we are going to test if this is a result of the random distribution model, by establishing a null distribution. Instead of comparing only the two countries' averages, we will repeatedly shuffle the yearly diabetes mortality percentages between the two countries, recompute the average mortality for each country, and record the difference. By repeating this process 1000 times, we can see how large the difference would be between the two countries if we were following the random chance model.
+
+```{r, warning = FALSE, message = FALSE}
+
+library(purrr)
+
+obs_diff <- diff(mortality_avg$avg_diabetes)
+obs_diff
+
+perm_data <- function(rep, data) {
+  data |>
+    select(country, `diabetes_pct`) |>
+    mutate(diabetes_perm = sample(`diabetes_pct`, replace = FALSE)) |>
+    group_by(country) |>
+    summarize(
+      perm_ave = mean(diabetes_perm)
+    ) |>
+    summarize(
+      perm_diff = diff(perm_ave),
+      rep = rep
+    )
+}
+
+set.seed(47)
+perm_stats <- map(1:1000, perm_data, data = mortality_filtered) |>
+  list_rbind()
+
+```
+
+```{r, warning = FALSE, message = FALSE}
+
+library(ggplot2)
+
+ggplot(perm_stats, aes(x = perm_diff)) +
+  geom_histogram(aes(y = ..density..), bins = 30, fill = "pink", color = "black", alpha = 0.5) +
+  geom_vline(aes(xintercept = obs_diff), color = "red", linetype = "dashed", size = 1.2) +
+  labs(title = "Null Distribution of Difference in Diabetes Mortality (%)",
+       subtitle = "France vs United States (All Years)",
+       x = "Difference in Mean Mortality (France - U.S.)",
+       y = "Density") +
+  theme_minimal()
+```
+
+p-value = 0 (\< 0.05) so this is strong evidence to reject our null hypothesis.
+
+We can reject the hypothesis that the mortality rates are the same for diabetes across all years (1990-2016).
+
+There is strong evidence that the alternative hypothesis stating that France and the US have different average mortality rates for diabetes from 1990-2016 is true.

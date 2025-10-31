@@ -14,6 +14,7 @@ website:
       - whales and dolphins.qmd
       - seasons.qmd
       - project2.qmd
+      - project3.qmd
     - Resources.qmd
     
 format:
