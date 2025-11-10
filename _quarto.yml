@@ -15,6 +15,7 @@ website:
       - seasons.qmd
       - project2.qmd
       - project3.qmd
+      - project4.qmd
     - Resources.qmd
     
 format:
