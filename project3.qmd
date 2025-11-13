@@ -9,11 +9,9 @@ global_mortality <- read_csv("global_mortality.csv")
 view(global_mortality)
 ```
 
-This dataset presents the mortality rate for different diseases, per year (from 1990 to 2016) and per country. We are exploring the specific average rate of mortality from diabetes in the United States and in France across all years.
+This dataset presents the mortality rate for different diseases, per year (from 1990 to 2016) and per country. We are exploring the specific average rate of mortality from diabetes in the United States and in France across all years. <https://github.com/rfordatascience/tidytuesday/tree/main/data/2018/2018-04-16>
 
-<https://github.com/rfordatascience/tidytuesday/tree/main/data/2018/2018-04-16>
-
-The original data comes from an article entitled Causes of death and published in the Our World in Data magazine by Saloni Dattani, Fiona Spooner, Hannah Ritchie and Max Roser at the following link:
+The original data comes from an article entitled, Causes of death and published in the Our World in Data magazine by Saloni Dattani, Fiona Spooner, Hannah Ritchie and Max Roser at the following link:
 
 Dattani, S., Spooner, F., Ritchie, H., & Roser, M. (2023). Causes of Death. *Our World in Data*. <https://ourworldindata.org/causes-of-death>
 
@@ -21,9 +19,9 @@ In this simulation study, we will explore whether France and the United States h
 
 My research question is the following: do the United States and France have different mortality rates for diabetes on average from 1990 to 2006?
 
-The null hypothesis (Ho) is that France and the US have the same average mortality rates for diabetes from 1990-2016.
+The null hypothesis (Ho): On average, there is no difference in mortality rates for diabetes.
 
-The alternative hypothesis (Ha) is that France and the US have different average mortality rates for diabetes from 1990-2016.
+The alternative hypothesis (Ha): On average, there is a difference in mortality rates for diabetes.
 
 ```{r, warning = FALSE, message = FALSE}
 

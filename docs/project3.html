@@ -153,7 +153,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
   </li>  
         <li>
     <a class="dropdown-item" href="./project4.html">
- <span class="dropdown-text">Ethics</span></a>
+ <span class="dropdown-text">Ethics: The Big Data era of Mosaiked Deidentification</span></a>
   </li>  
     </ul>
   </li>
@@ -206,14 +206,13 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <span id="cb1-4"><a href="#cb1-4" aria-hidden="true" tabindex="-1"></a><span class="fu">view</span>(global_mortality)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </details>
 </div>
-<p>This dataset presents the mortality rate for different diseases, per year (from 1990 to 2016) and per country. We are exploring the specific average rate of mortality from diabetes in the United States and in France across all years.</p>
-<p><a href="https://github.com/rfordatascience/tidytuesday/tree/main/data/2018/2018-04-16" class="uri">https://github.com/rfordatascience/tidytuesday/tree/main/data/2018/2018-04-16</a></p>
-<p>The original data comes from an article entitled Causes of death and published in the Our World in Data magazine by Saloni Dattani, Fiona Spooner, Hannah Ritchie and Max Roser at the following link:</p>
+<p>This dataset presents the mortality rate for different diseases, per year (from 1990 to 2016) and per country. We are exploring the specific average rate of mortality from diabetes in the United States and in France across all years. <a href="https://github.com/rfordatascience/tidytuesday/tree/main/data/2018/2018-04-16" class="uri">https://github.com/rfordatascience/tidytuesday/tree/main/data/2018/2018-04-16</a></p>
+<p>The original data comes from an article entitled, Causes of death and published in the Our World in Data magazine by Saloni Dattani, Fiona Spooner, Hannah Ritchie and Max Roser at the following link:</p>
 <p>Dattani, S., Spooner, F., Ritchie, H., &amp; Roser, M. (2023). Causes of Death. <em>Our World in Data</em>. <a href="https://ourworldindata.org/causes-of-death" class="uri">https://ourworldindata.org/causes-of-death</a></p>
 <p>In this simulation study, we will explore whether France and the United States have the same average diabetes mortality rate. We will first calculate the observed difference in mean diabetes mortality between the two countries across all available years (1990-2016). To test whether the difference we observe could have been a result of random distribution, we will run a permutation test shuffling the diabetes mortality percentage rates countries 1000 times, to create a null distribution.</p>
 <p>My research question is the following: do the United States and France have different mortality rates for diabetes on average from 1990 to 2006?</p>
-<p>The null hypothesis (Ho) is that France and the US have the same average mortality rates for diabetes from 1990-2016.</p>
-<p>The alternative hypothesis (Ha) is that France and the US have different average mortality rates for diabetes from 1990-2016.</p>
+<p>The null hypothesis (Ho): On average, there is no difference in mortality rates for diabetes.</p>
+<p>The alternative hypothesis (Ha): On average, there is a difference in mortality rates for diabetes.</p>
 <div class="cell">
 <details class="code-fold">
 <summary>Code</summary>
