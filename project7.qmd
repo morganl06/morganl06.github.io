@@ -1,0 +1,19 @@
+---
+title: "Passions and memories!"
+format: html
+---
+
+::: {.raw-html}
+<div style="display: flex; justify-content: space-around; align-items: flex-start;">
+  <img src="rugby1.jpg" style="width:35%; height:auto;"/>
+  <img src="rugby2.jpg" style="width:30%; height:auto;"/>
+  <img src="rugby3.jpg" style="width:30%; height:auto;"/>
+</div>
+
+<div style="display: flex; justify-content: space-around; align-items: flex-start; margin-top:20px;">
+  <img src="snow1.jpg" style="width:25%; height:auto;"/>
+  <img src="legion.jpg" style="width:40%; height:auto;"/>
+  <img src="snow2.jpg" style="width:30%; height:auto;"/>
+</div>
+:::
+---

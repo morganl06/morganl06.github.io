@@ -39,3 +39,5 @@ The American Idol dataset I worked with comes from the TidyTuesday database.
 \[link\] <https://github.com/rfordatascience/tidytuesday/blob/main/data/2024/2024-07-23/readme.md>
 
 The original dataset comes from Wikipedia.
+
+<https://en.wikipedia.org/wiki/American_Idol>

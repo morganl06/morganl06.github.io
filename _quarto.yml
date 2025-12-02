@@ -16,13 +16,18 @@ website:
       - project2.qmd
       - project3.qmd
       - project4.qmd
-    - Resources.qmd
+      - project5.qmd
+    - text: "Resources"
+      menu: 
+      - project6.qmd
+      - project7.qmd
+    - my_slides.qmd
     
 format:
   html:
     code-fold: true 
     theme:
-      - yeti
+      - sandstone
     css: styles.css
     toc: true
     page-layout: full 

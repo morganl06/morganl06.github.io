@@ -72,7 +72,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <link href="site_libs/quarto-html/quarto-syntax-highlighting-2f5df379a58b258e96c21c0638c20c03.css" rel="stylesheet" id="quarto-text-highlighting-styles">
 <script src="site_libs/bootstrap/bootstrap.min.js"></script>
 <link href="site_libs/bootstrap/bootstrap-icons.css" rel="stylesheet">
-<link href="site_libs/bootstrap/bootstrap-6bbb2ee3340c67b6da55fdc5589aeeb3.min.css" rel="stylesheet" append-hash="true" id="quarto-bootstrap" data-mode="light">
+<link href="site_libs/bootstrap/bootstrap-7ad6542725e80d1433b1f8ee26c2a1fc.min.css" rel="stylesheet" append-hash="true" id="quarto-bootstrap" data-mode="light">
 <script id="quarto-search-options" type="application/json">{
   "location": "navbar",
   "copy-button": false,
@@ -124,7 +124,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
             <ul class="navbar-nav navbar-nav-scroll me-auto">
   <li class="nav-item">
     <a class="nav-link" href="./index.html"> 
-<span class="menu-text">Morgan L</span></a>
+<span class="menu-text">Welcome!</span></a>
   </li>  
   <li class="nav-item">
     <a class="nav-link" href="./about.html"> 
@@ -155,11 +155,30 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
     <a class="dropdown-item" href="./project4.html">
  <span class="dropdown-text">Ethics: The Big Data era of Mosaicked Deidentification</span></a>
   </li>  
+        <li>
+    <a class="dropdown-item" href="./project5.html">
+ <span class="dropdown-text">Racial disparities in traffic and pedestrian stops in three similar California cities</span></a>
+  </li>  
+    </ul>
+  </li>
+  <li class="nav-item dropdown ">
+    <a class="nav-link dropdown-toggle" href="#" id="nav-menu-resources" role="link" data-bs-toggle="dropdown" aria-expanded="false">
+ <span class="menu-text">Resources</span>
+    </a>
+    <ul class="dropdown-menu" aria-labelledby="nav-menu-resources">    
+        <li>
+    <a class="dropdown-item" href="./project6.html">
+ <span class="dropdown-text">My resume!</span></a>
+  </li>  
+        <li>
+    <a class="dropdown-item" href="./project7.html">
+ <span class="dropdown-text">Passions and memories!</span></a>
+  </li>  
     </ul>
   </li>
   <li class="nav-item">
-    <a class="nav-link" href="./Resources.html"> 
-<span class="menu-text">My resources!!</span></a>
+    <a class="nav-link" href="./my_slides.html"> 
+<span class="menu-text">Ethics on Netflix</span></a>
   </li>  
 </ul>
           </div> <!-- /navcollapse -->
@@ -206,13 +225,12 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <span id="cb1-4"><a href="#cb1-4" aria-hidden="true" tabindex="-1"></a><span class="fu">view</span>(global_mortality)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </details>
 </div>
-<p>This dataset presents the mortality rate for different diseases, per year (from 1990 to 2016) and per country. We are exploring the specific average rate of mortality from diabetes in the United States and in France across all years. <a href="https://github.com/rfordatascience/tidytuesday/tree/main/data/2018/2018-04-16" class="uri">https://github.com/rfordatascience/tidytuesday/tree/main/data/2018/2018-04-16</a></p>
-<p>The original data comes from an article entitled, Causes of death and published in the Our World in Data magazine by Saloni Dattani, Fiona Spooner, Hannah Ritchie and Max Roser at the following link:</p>
-<p>Dattani, S., Spooner, F., Ritchie, H., &amp; Roser, M. (2023). Causes of Death. <em>Our World in Data</em>. <a href="https://ourworldindata.org/causes-of-death" class="uri">https://ourworldindata.org/causes-of-death</a></p>
-<p>In this simulation study, we will explore whether France and the United States have the same average diabetes mortality rate. We will first calculate the observed difference in mean diabetes mortality between the two countries across all available years (1990-2016). To test whether the difference we observe could have been a result of random distribution, we will run a permutation test shuffling the diabetes mortality percentage rates countries 1000 times, to create a null distribution.</p>
-<p>My research question is the following: do the United States and France have different mortality rates for diabetes on average from 1990 to 2006?</p>
-<p>The null hypothesis (Ho): On average, there is no difference in mortality rates for diabetes.</p>
-<p>The alternative hypothesis (Ha): On average, there is a difference in mortality rates for diabetes.</p>
+<p>This dataset presents the mortality rate for different diseases, per year (from 1990 to 2016) and per country. We are exploring the specific average rate of mortality from diabetes in the United States and in France across all years. The dataset I analyzed comes from the Tidy Tuesday database and is available at the following link. <a href="https://github.com/rfordatascience/tidytuesday/tree/main/data/2018/2018-04-16" class="uri">https://github.com/rfordatascience/tidytuesday/tree/main/data/2018/2018-04-16</a></p>
+<p>The original data comes from an article entitled, “Causes of death” and published in the Our World in Data magazine by Saloni Dattani, Fiona Spooner, Hannah Ritchie and Max Roser at the following link: Dattani, S., Spooner, F., Ritchie, H., &amp; Roser, M. (2023). Causes of Death. <em>Our World in Data</em>. <a href="https://ourworldindata.org/causes-of-death" class="uri">https://ourworldindata.org/causes-of-death</a></p>
+<p>In this simulation study, we will explore whether France and the United States have the same average diabetes mortality rate. We will first calculate the observed difference in mean diabetes mortality between the two countries across all available years (1990-2016). To test whether the difference we observe could have been a result of random distribution, we will run a permutation test shuffling the diabetes mortality percentage rate per country 1000 times, to create a null distribution. By treating the observed years as a sample, we can use a permutation test to assess whether the observed difference in average mortality is larger than we would expect from random variation in yearly mortality. This allows us to generalize conclusions beyond the years in the dataset.</p>
+<p>The research question we are answering is the following: Do the US and France differ in underlying diabetes mortality rates, beyond what might occur by chance?</p>
+<p>The null hypothesis (Ho): The underlying process generating the diabetes mortality rate is the same in France and the US. Any observed difference in yearly mortality rates is due to random variation across years.</p>
+<p>The alternative hypothesis (Ha): The underlying process differs between the two countries, leading to different average diabetes mortality rates.</p>
 <div class="cell">
 <details class="code-fold">
 <summary>Code</summary>
@@ -266,6 +284,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 </div>
 </div>
 </div>
+<p><strong>The main variable of interest is the percentage of diabetes mortality rate. While this dataset does not provide a detailed description, we infer that it represents the percentage of deaths in a given year that were attributed to diabetes.</strong></p>
 <p>We observe a difference in average mortality rate between the two countries, so now we are going to test if this is a result of the random distribution model, by establishing a null distribution. Instead of comparing only the two countries’ averages, we will repeatedly shuffle the yearly diabetes mortality percentages between the two countries, recompute the average mortality for each country, and record the difference. By repeating this process 1000 times, we can see how large the difference would be between the two countries if we were following the random chance model.</p>
 <div class="cell">
 <details class="code-fold">
@@ -321,9 +340,9 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 </div>
 </div>
 </div>
-<p>p-value = 0 (&lt; 0.05) so this is strong evidence to reject our null hypothesis.</p>
+<p>Our p-value is 0, which is less than 0.05 so this is strong evidence to reject our null hypothesis.</p>
 <p>We can reject the hypothesis that the mortality rates are the same for diabetes across all years (1990-2016).</p>
-<p>There is strong evidence that the alternative hypothesis stating that France and the US have different average mortality rates for diabetes from 1990-2016 is true.</p>
+<p>The permutation test gives a very small p-value, suggesting that the difference in diabetes mortality between the US and France is unlikely to be due to random variation alone.</p>
 
 
 

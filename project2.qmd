@@ -19,11 +19,11 @@ netflix <- netflix_titles
 library(dplyr)
 library(ggplot2)
 library(stringr)
+library(scales)
+
 
 netflix_love_war <- netflix |>
-  filter(
-    str_detect(title, regex("(?<!\\w)Love|War(?!\\w)", ignore_case = TRUE)) 
-  ) |>
+  filter(str_detect(title, "(?<!\\w)(Love|War)(?!\\w)")) |>
   select(title, type, country, release_year)
 
 total_by_year <- netflix |>
@@ -35,102 +35,103 @@ love_war_by_year <- netflix_love_war |>
 love_war_prop <- left_join(love_war_by_year, total_by_year, by = "release_year") |>
   mutate(prop_titles = love_war_titles / total_titles)
 
+
 ggplot(love_war_prop, aes(x = release_year, y = prop_titles)) +
-  geom_col(fill = "pink") +
-  geom_line(color = "red", size = 1) +
-  labs(
-    title = "Proportion of Netflix Titles Containing 'Love' or 'War' Over Time",
-    x = "Release Year",
-    y = "Proportion of Titles"
-  ) +
-  theme_minimal()
-  
+geom_col(fill = "pink") +
+geom_line(color = "red", size = 1) +
+labs(
+title = "Proportion of Netflix Titles Containing 'Love' or 'War' Over Time",
+x = "Release Year",
+y = "Proportion of Titles"
+) +
+theme_minimal()
 ```
 
 This plot shows the proportion of titles with the words "Love" and "War" over time. It reflects that the shows released were highly correlated with historical context. Indeed, we see that the highest peak was during the Second World War.
 
-```{r warning=FALSE, message=FALSE}
+```{r, warning=FALSE, message=FALSE}
 
 netflix_trends <- netflix_love_war |>
-  mutate(
-    type = factor(type),
-    contains_heart_battle = str_detect(title, regex("Love|War", ignore_case = TRUE)), 
-    first_word = str_extract(title, "^\\S+"),       
-  ) |>
-  filter(!is.na(release_year))
+mutate(
+type = factor(type),
+contains_heart_battle = TRUE, 
+first_word = word(title, 1)
+) |>
+filter(!is.na(release_year))
 
 netflix_proportions <- netflix_trends |>
-  group_by(release_year, type) |>
-  summarise(n_titles = n(), .groups = "drop") |>
-  group_by(release_year) |>
-  mutate(prop_titles = n_titles / sum(n_titles)) |>
-  ungroup()
+group_by(release_year, type) |>
+summarise(n_titles = n(), .groups = "drop") |>
+group_by(release_year) |>
+mutate(prop_titles = n_titles / sum(n_titles)) |>
+ungroup()
+
 
 ggplot(netflix_proportions, aes(x = release_year, y = prop_titles, fill = type)) +
-  geom_col(position = "stack") +
-  scale_fill_manual(values = c("Movie" = "steelblue", "TV Show" = "orange")) +
-  scale_y_continuous(labels = scales::percent_format(accuracy = 1)) +
-  labs(
-    x = "Release Year",
-    y = "Proportion of Titles",
-    fill = "Content Type",
-    title = "Proportion Movies vs TV shows available on Netflix over time"
-  ) +
-  theme_minimal()
+geom_col(position = "stack") +
+scale_fill_manual(values = c("Movie" = "steelblue", "TV Show" = "orange")) +
+scale_y_continuous(labels = percent_format(accuracy = 1)) +
+labs(
+x = "Release Year",
+y = "Proportion of Titles",
+fill = "Content Type",
+title = "Proportion of Movies vs TV Shows on Netflix Over Time"
+) +
+theme_minimal()
 ```
 
 This plot shows the proportion of movies and TV shows available on Netflix over time. It is interesting to see an increase in TV shows in more recent years.
 
-```{r}
-library(dplyr)
-library(ggplot2)
-library(stringr)
-
+```{r, warning=FALSE, message=FALSE}
 
 netflix_genre <- netflix_titles |>
-  mutate(
-    main_genre = str_extract(listed_in, "^[^,]+"),  
-    main_genre_upper = str_to_upper(main_genre),    
-    is_action = str_detect(main_genre, "Action")   
-  ) |>
-  drop_na(release_year, main_genre_upper) |>
-  filter(release_year >= 1950)
+mutate(
+main_genre = str_extract(listed_in, "^[^,]+"),
+main_genre_upper = str_to_upper(main_genre),
+is_action = str_detect(main_genre, "Action")
+) |>
+drop_na(release_year, main_genre_upper) |>
+filter(release_year >= 1950)
+
+
 
 top_genres <- netflix_genre |>
-  count(main_genre_upper, sort = TRUE) |>
-  slice_head(n = 6) |>
-  pull(main_genre_upper)
+count(main_genre_upper, sort = TRUE) |>
+slice_head(n = 6) |>
+pull(main_genre_upper)
+
+
 
 netflix_top_genres <- netflix_genre |>
-  filter(main_genre_upper %in% top_genres) |>
-  mutate(
-    period = case_when(
-      release_year < 2010 ~ "Before 2010",
-      release_year >= 2010 & release_year < 2020 ~ "2010–2019",
-      release_year >= 2020 ~ "2020–Present"
-    ),
-    period = factor(period, levels = c("Before 2010", "2010–2019", "2020–Present"))
-  )
+filter(main_genre_upper %in% top_genres) |>
+mutate(
+period = case_when(
+release_year < 2010 ~ "Before 2010",
+release_year >= 2010 & release_year < 2020 ~ "2010–2019",
+release_year >= 2020 ~ "2020–Present"
+),
+period = factor(period, levels = c("Before 2010", "2010–2019", "2020–Present"))
+)
+
 
 genre_trends <- netflix_top_genres |>
-  count(period, main_genre_upper, is_action) |>
-  group_by(period) |>
-  mutate(prop = n / sum(n)) |>
-  ungroup()
+count(period, main_genre_upper, is_action) |>
+group_by(period) |>
+mutate(prop = n / sum(n)) |>
+ungroup()
 
 ggplot(genre_trends, aes(x = period, y = prop, fill = main_genre_upper)) +
-  geom_col(position = position_dodge(width = 0.8)) +
-  scale_y_continuous(labels = scales::percent_format(accuracy = 1)) +
-  labs(
-    title = "Evolution of Top Netflix Genres Over Time",
-    subtitle= "Each genre shown separately, one color per genre",
-    x = "Release Period",
-    y = "Proportion of Titles",
-    fill = "Genre"
-  ) +
-  theme_minimal(base_size = 9) +
-  theme(legend.position = "top")
-
+geom_col(position = position_dodge(width = 0.8)) +
+scale_y_continuous(labels = percent_format(accuracy = 1)) +
+labs(
+title = "Evolution of Top Netflix Genres Over Time",
+subtitle = "Each genre shown separately, one color per genre",
+x = "Release Period",
+y = "Proportion of Titles",
+fill = "Genre"
+) +
+theme_minimal(base_size = 9) +
+theme(legend.position = "top")
 ```
 
 This last plot evolution in proportion of Netflix titles per genre. Following the same theme as previously, we can see it follows the audience demand, and historical context. For example, we can see an increase from 5% to 25% of titles that are international TV shows, which emphasizes a broadening target audience.
@@ -139,6 +140,8 @@ Over time, Netflix has shifted to an increasing number of TV shows comparing to 
 
 One thing to be mindful of, is that the number of samples is limited from the 1940s to the 1990s, which explains why the values we see are so extreme, but don't exactly reflect reality.
 
-The dataset is collected from Flixable which is a third-party Netflix search engine.
+Shivan Bansal scrapeed this data and made it publicly available on Kaggle at the following link:
 
-\[link\] <https://github.com/rfordatascience/tidytuesday/blob/main/data/2021/2021-04-20/readme.md>
+<https://www.kaggle.com/datasets/shivamb/netflix-shows>
+
+The dataset I used lives in the Tidy Tuesday database.

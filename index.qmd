@@ -1,5 +1,5 @@
 ---
-title: "Morgan L"
+title: "Welcome!"
 image: mylo.jpg
 toc: false
 about: 
@@ -15,4 +15,4 @@ This is a Quarto website.
 
 To learn more about Quarto websites visit <https://quarto.org/docs/websites>.
 
-Hi! This is my project for DS002! I'm interested in minoring in Data Science! Outside of academics, I play rugby and like to bake with friends.
+Hi! Welcome to my website. I'm Morgan, a student at Pomona College and my website showcases some of my favorite things including wildlife, Netflix shows and rugby, sport that I play in college. I'm interested in pursuing a career in healthcare or neuroscience research.

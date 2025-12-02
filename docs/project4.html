@@ -38,7 +38,7 @@ ul.task-list li input[type="checkbox"] {
 <link href="site_libs/quarto-html/quarto-syntax-highlighting-2f5df379a58b258e96c21c0638c20c03.css" rel="stylesheet" id="quarto-text-highlighting-styles">
 <script src="site_libs/bootstrap/bootstrap.min.js"></script>
 <link href="site_libs/bootstrap/bootstrap-icons.css" rel="stylesheet">
-<link href="site_libs/bootstrap/bootstrap-6bbb2ee3340c67b6da55fdc5589aeeb3.min.css" rel="stylesheet" append-hash="true" id="quarto-bootstrap" data-mode="light">
+<link href="site_libs/bootstrap/bootstrap-7ad6542725e80d1433b1f8ee26c2a1fc.min.css" rel="stylesheet" append-hash="true" id="quarto-bootstrap" data-mode="light">
 <script id="quarto-search-options" type="application/json">{
   "location": "navbar",
   "copy-button": false,
@@ -90,7 +90,7 @@ ul.task-list li input[type="checkbox"] {
             <ul class="navbar-nav navbar-nav-scroll me-auto">
   <li class="nav-item">
     <a class="nav-link" href="./index.html"> 
-<span class="menu-text">Morgan L</span></a>
+<span class="menu-text">Welcome!</span></a>
   </li>  
   <li class="nav-item">
     <a class="nav-link" href="./about.html"> 
@@ -121,11 +121,30 @@ ul.task-list li input[type="checkbox"] {
     <a class="dropdown-item" href="./project4.html">
  <span class="dropdown-text">Ethics: The Big Data era of Mosaicked Deidentification</span></a>
   </li>  
+        <li>
+    <a class="dropdown-item" href="./project5.html">
+ <span class="dropdown-text">Racial disparities in traffic and pedestrian stops in three similar California cities</span></a>
+  </li>  
+    </ul>
+  </li>
+  <li class="nav-item dropdown ">
+    <a class="nav-link dropdown-toggle" href="#" id="nav-menu-resources" role="link" data-bs-toggle="dropdown" aria-expanded="false">
+ <span class="menu-text">Resources</span>
+    </a>
+    <ul class="dropdown-menu" aria-labelledby="nav-menu-resources">    
+        <li>
+    <a class="dropdown-item" href="./project6.html">
+ <span class="dropdown-text">My resume!</span></a>
+  </li>  
+        <li>
+    <a class="dropdown-item" href="./project7.html">
+ <span class="dropdown-text">Passions and memories!</span></a>
+  </li>  
     </ul>
   </li>
   <li class="nav-item">
-    <a class="nav-link" href="./Resources.html"> 
-<span class="menu-text">My resources!!</span></a>
+    <a class="nav-link" href="./my_slides.html"> 
+<span class="menu-text">Ethics on Netflix</span></a>
   </li>  
 </ul>
           </div> <!-- /navcollapse -->
@@ -171,23 +190,23 @@ ul.task-list li input[type="checkbox"] {
 
 <section id="section" class="level3">
 <h3 class="anchored" data-anchor-id="section"></h3>
-<p>In 2006, Netflix, a streaming service company, released a dataset of nearly 500,000 users’ movie ratings for a public machine-learning competition, the Netflix Prize, claiming that all personal information had been removed to protect privacy (Leetaru, 2016). The goal of releasing this dataset was to allow researchers to develop improved recommendation algorithms, which predict what movies a user might like based on past ratings. Although Netflix removed names and account IDs, the data contained unique patterns of user behavior that could potentially reveal identities. Moreover, multiple datasets can be combined to fill in each other’s missing information, a concept known as “mosaicking,” which illustrates how supposedly anonymized data can still be re-identified (Leetaru, 2016).</p>
-<p>However, in 2008, researchers Arvind Narayanan and Vitaly Shmatikov demonstrated that users could be re-identified by cross-referencing their “anonymous” rating patterns with publicly available profiles on the Internet Movie Database (IMDb). Even if someone had rated only a few movies on IMDb, their Netflix record could be linked with high accuracy. While the dataset was intended for data science research, there was an ethical dilemma centered on privacy: Netflix promised the data was anonymized, but individuals could still be identified, and sensitive information such as political preferences, sexual orientation, religious interests, and personal tastes could be exposed without their knowledge or meaningful consent.</p>
+<p>In 2006, Netflix, a large streaming service, released a dataset containing nearly 500,000 users’ movie ratings as part of a public machine-learning competition called the Netflix Prize. Netflix claimed that all personal information had been removed to protect user privacy (Leetaru, 2016). The purpose of releasing the dataset was to allow researchers to develop improved recommendation algorithms—that is, models that predict what movies a user might enjoy based on their past ratings. Although names and account IDs were removed, the dataset preserved detailed behavioral traces such as timestamps and rating patterns, which can be uniquely identifying. Additionally, multiple datasets can be combined to fill in one another’s missing pieces, a process known as “mosaicking,” which illustrates why seemingly anonymized data can still reveal identities (Leetaru, 2016).</p>
+<p>In 2008, researchers Arvind Narayanan and Vitaly Shmatikov demonstrated that the Netflix Prize dataset was vulnerable to deanonymization by matching users’ Netflix rating patterns with publicly available rating histories from IMDb (Narayanan &amp; Shmatikov, 2008). Even if someone rated only a handful of movies on IMDb, the combination of rating values and timestamps was often specific enough to identify their full Netflix record with high accuracy. This showed that the dataset—though intended for research—posed broader privacy risks: individuals’ preferences related to politics, sexuality, religion, or personal interests could be exposed without their knowledge or consent.</p>
 <p><strong>Was the consent structure and permission followed?</strong></p>
-<p>Although Netflix technically removed names and replaced user IDs with random numbers, users were never informed that their data would be shared for research or public competition. The consent structure assumed “anonymization” was enough to make the data safe, so no explicit permission was requested. The users didn’t really consent to their data being used. In reality, the ability to deanonymize users shows that meaningful consent was not possible. People had no way of anticipating that their personal movie choices could be reconstructed and linked back to their identities. The ethical issue is that Netflix believed anonymity eliminated risk, but privacy experts consider streaming data highly identifiable because everyone has a unique pattern of media consumption.</p>
+<p>Although Netflix removed explicit identifiers, users were never informed that their ratings would be shared publicly for a research competition. No explicit permission was requested, and the release relied on the assumption that anonymization alone made the data safe (Leetaru, 2016). The users did <strong>not</strong> consent to this secondary use of their data. Moreover, because the dataset could be deanonymized, Netflix’s anonymization was insufficient to provide meaningful privacy protection. Individuals had no reasonable expectation that their private rating histories could be reconstructed and linked back to them using external data sources. The ethical issue is that Netflix treated anonymization as a substitute for consent, despite expert evidence that behavioral data is highly identifiable (Narayanan &amp; Shmatikov, 2008).</p>
 <p><strong>Was the data being used in unintended ways?</strong></p>
-<p>Although the Netflix dataset was released to improve recommendation algorithms, it was not originally intended to be cross-referenced with other platforms to deanonymize users. Narayanan and Shmatikov’s work revealed that the same data could be exploited in ways the participants and Netflix had not anticipated, illustrating a case of “secondary use” risks in data science. Users’ personal preferences, originally intended only for improving movie recommendations, became a source of potential privacy violations when combined with IMDb ratings. This highlights a critical ethical issue: even when data are collected and shared legally, unforeseen uses can expose individuals to harm.</p>
+<p>Yes. Netflix released the dataset specifically to improve recommendation algorithms, but the data was not intended to be cross-referenced with external platforms to re-identify users. Narayanan and Shmatikov (2008) showed that such cross-linking was not only possible but highly accurate. This is an example of secondary use, where data collected for one purpose (recommender systems) is repurposed for another (deanonymization research), highlighting a key risk in data science. Users’ rating histories—originally meant only for their own viewing recommendations—became a potential vehicle for revealing sensitive personal information.</p>
 <p><strong>Was the data actually anonymized?</strong></p>
-<p>The dataset was only partially anonymized. Names and account IDs were removed, but the behavioral identity of each user (movie choices, timestamps, rating patterns, etc.) was kept intact. Those patterns act like a digital signature: knowing a person’s movie history from another platform is enough to reveal them in the Netflix dataset. Researchers showed that if you know a person rated just 6 movies on IMDb, even approximately, you can identify their entire Netflix record (Narayanan, Shmatikov, 2008). Once that link is possible, a user’s full viewing history (movies about sexuality, mental health, or political interests) can be uncovered. This shows that “anonymous” data can still be personally identifiable, and that anonymization is not the same as privacy.</p>
+<p>The data was only partially anonymized. Netflix removed names and replaced account IDs, but retained users’ complete behavioral profiles, which function like digital fingerprints. Rating sequences, timing patterns, and movie choices are distinctive enough to identify individuals with surprising accuracy. Narayanan and Shmatikov (2008) demonstrated that knowing a user’s approximate ratings on just a few films on IMDb could be sufficient to re-identify that user in the Netflix dataset. Once linked, the person’s full Netflix viewing history (content related to sexuality, mental health, religion, or politics) became exposed. This case illustrates that anonymization is not equivalent to privacy.</p>
 <p><strong>Who was harmed, and who benefitted?</strong></p>
-<p>Netflix benefitted by crowdsourcing algorithm improvements without paying the researchers who created models for them. Academic teams also benefited because the dataset helped produce publications and benchmarks. The people harmed were everyday Netflix users who didn’t agree to have their private viewing habits shared publicly. Some users in the deanonymized dataset could be outed for sensitive media preferences such as LGBTQ films, religious documentaries, or political content that could expose personal details about identity or beliefs. Even if Netflix never intended to harm anyone, there was a privacy violation: once de-identification failed, user data became “re-identifiable,” and therefore no longer private.</p>
+<p>Netflix benefited from crowdsourcing improvements to its recommendation algorithms at no financial cost, and academic researchers gained publications and benchmark data from the competition. However, the individuals harmed were ordinary Netflix users whose rating histories were shared without explicit permission. Some users who were deanonymized had sensitive movie preferences that could reveal personal identity attributes. Even without malicious intent, releasing re-identifiable behavioral data created real privacy risks once anonymization proved ineffective.</p>
 <p><strong>Who was measured, and can results be generalized?</strong></p>
-<p>The Netflix dataset represents users who actively rated movies on the platform, which may not reflect the broader population of movie viewers. These individuals are self-selected and may differ in demographics or viewing habits from the general public. Algorithms trained on this dataset could thus overfit to the behavior of this subgroup, raising questions about fairness, bias, and generalizability of recommendations built from this data.</p>
+<p>The dataset represents only users who actively rate movies on Netflix, a non-random and self-selected subgroup. These users may differ from the general Netflix population in age, engagement, genre preferences, and rating behavior. Therefore, models trained on the Netflix Prize dataset generalize poorly to users who rarely rate movies or who consume content without providing feedback. This introduces bias and limits the external validity of any models or conclusions derived from the dataset.</p>
 <p><strong>Why does this example matter for data science?</strong></p>
-<p>This case matters because it shows how easy it is to de-anonymize data that companies claim is safe. It challenges the idea that privacy can be protected simply by removing names. The Netflix example proves that behavior itself (what you watch, when you watch it, what you rate) is a form of identity that we may not think of at first glance. It also highlights a power imbalance between the company and the users: Netflix had control of the data, used it to improve profit-generating algorithms, and exposed users to risk without their knowledge.</p>
-<p><strong>References:</strong></p>
-<p>Leetaru, K. (2016), <a href="https://www.forbes.com/sites/kalevleetaru/2016/08/24/the-big-data-era-of-mosaicked-deidentification-can-we-anonymize-data-anymore/">The Big Data Era of Mosaicked Deidentification: Can We Anonymize Data Anymore?</a>, Forbes.</p>
-<p>Narayanan, A., &amp; Shmatikov, V. (2008). <em>Robust de-anonymization of large sparse datasets</em>. In <em>Proceedings – 2008 IEEE Symposium on Security and Privacy (SP)</em> (pp.&nbsp;111–125). <a href="https://ieeexplore.ieee.org/stamp/stamp.jsp?arnumber=4531148" class="uri">https://ieeexplore.ieee.org/stamp/stamp.jsp?arnumber=4531148</a></p>
+<p>The Netflix Prize case demonstrates how easy it is to re-identify individuals from behavioral data that companies claim is anonymous. It challenges the assumption that removing names is sufficient for privacy protection and highlights the fact that human behavior itself is highly identifiable. It also exposes a power imbalance: companies control the data and may share it widely for their own benefit, while users are often unaware their information is being repurposed in ways that could expose them to harm. The incident remains a foundational example in data ethics, showing the need for stronger protections, transparent consent processes, and caution when releasing real-world datasets.</p>
+<p><strong>References</strong></p>
+<p>Leetaru, K. (2016). <em>The Big Data Era of Mosaicked Deidentification: Can We Anonymize Data Anymore?</em> Forbes.</p>
+<p>Narayanan, A., &amp; Shmatikov, V. (2008). <em>Robust de-anonymization of large sparse datasets.</em> IEEE Symposium on Security and Privacy, 111–125.</p>
 
 
 </section>

@@ -1,0 +1,115 @@
+---
+title: "Racial disparities in traffic and pedestrian stops in three similar California cities"
+format:
+  html:
+    code-fold: true   
+---
+
+Traffic stops are a critical point of interaction between law enforcement and the public, and they provide insight into potential disparities in policing. This project examines traffic stop data from three California cities—San Francisco, Oakland, and San Jose—drawn from the Stanford Open Policing Project. The goal of this analysis is to explore the relationship between city-level enforcement practices and racial disparities in traffic stops. I aim to identify patterns that reveal how race may influence stop frequency and stop type (vehicular vs pedestrian).
+
+I selected these cities because they are all major urban areas within the same region of California, which allows for meaningful comparisons of traffic stop patterns because they share broad structural similarities (state-level policies, large population size, etc.).
+
+```{r,warning = FALSE, message = FALSE}
+
+library(DBI)
+library(dplyr)
+library(ggplot2)
+
+con_traffic <- DBI::dbConnect(
+
+  RMariaDB::MariaDB(),
+
+  dbname = "traffic",
+
+  host = Sys.getenv("TRAFFIC_HOST"),
+
+  user = Sys.getenv("TRAFFIC_USER"),
+
+  password = Sys.getenv("TRAFFIC_PWD")
+
+)
+
+```
+
+```{r, warning = FALSE, message = FALSE}
+
+ca_combined_summary <- dbGetQuery(con_traffic, "
+SELECT city, subject_race AS race, EXTRACT(YEAR FROM date) AS year,
+       COUNT(*) AS n_stops,
+       SUM(CASE WHEN type = 'vehicular' THEN 1 ELSE 0 END) AS vehicular_stops,
+       SUM(CASE WHEN type = 'pedestrian' THEN 1 ELSE 0 END) AS pedestrian_stops
+FROM (
+    SELECT subject_race, date, type, 'San Francisco' AS city FROM ca_san_francisco_2020_04_01
+    UNION ALL
+    SELECT subject_race, date, type, 'Oakland' AS city FROM ca_oakland_2020_04_01
+    UNION ALL
+    SELECT subject_race, date, type, 'San Jose' AS city FROM ca_san_jose_2020_04_01
+) AS combined
+WHERE subject_race IS NOT NULL
+GROUP BY city, race, year
+ORDER BY city, race, year
+")
+```
+
+```{r, warning = FALSE, message = FALSE}
+
+library(ggplot2)
+
+ggplot(ca_combined_summary, aes(x = race, y = n_stops, fill = city)) +
+  geom_col(position = "dodge") +
+  labs(
+    title = "Traffic Stops by Race — 3 California Cities",
+    x = "Race",
+    y = "Number of Stops",
+    fill = "City"
+  ) +
+  theme_minimal() +
+  theme(axis.text.x = element_text(angle = 45, hjust = 1))
+
+```
+
+This graph compares the total number of traffic stops among racial groups in San Francisco, Oakland, and San Jose. In San Francisco, white drivers account for the highest number of stops. In Oakland, Black drivers are stopped most often, while in San Jose Hispanic drivers experience the highest number of stops.
+
+These differences show that the racial distribution of traffic stops varies substantially across these three cities. Because the population sizes and racial compositions of these cities differ, the raw number of stops cannot be interpreted as “rates,” but the variation still highlights that each city’s policing patterns affect groups differently. The higher stop counts for certain racial groups, particularly Black drivers in Oakland, suggest that disparities may exist, though additional context (like population-adjusted rates or stop-risk calculations) would be needed to determine whether these differences reflect systemic inequities or simply demographic differences.
+
+```{r,warning = FALSE, message = FALSE}
+
+library(ggplot2)
+library(dplyr)
+
+ca_plot2 <- ca_combined_summary |>
+  group_by(city, race) |>
+  summarise(
+    total_stops = sum(n_stops),
+    total_pedestrian = sum(pedestrian_stops),
+    .groups = "drop"
+  ) |>
+  mutate(pedestrian_pct = 100 * total_pedestrian / total_stops)
+
+ca_plot2$race <- factor(ca_plot2$race, levels = sort(unique(ca_plot2$race)))
+
+
+ggplot(ca_plot2, aes(x = race, y = pedestrian_pct, fill = city)) +
+  geom_col(position = "dodge") +
+  labs(
+    title = "Proportion of Pedestrian Stops by Race — 3 CA Cities",
+    x = "Race",
+    y = "Percent Pedestrian Stops",
+    fill = "City"
+  ) +
+  theme_minimal() +
+  theme(
+    axis.text.x = element_text(angle = 45, hjust = 1),
+    panel.grid.major.x = element_blank()
+  )
+```
+
+This plot shows the percentage of all stops that are pedestrian stops for each racial group in San Francisco, Oakland, and San Jose. San Francisco has no pedestrian-stop data in this dataset, so only Oakland and San Jose appear in the comparison.
+
+In San Jose, the proportion of stops that are pedestrian stops varies across racial groups—for example, Black individuals have a noticeably higher proportion than Asian/Pacific Islander individuals. In Oakland, however, the proportions are more similar across racial groups, with no large differences visible.
+
+Similarly to the overlal traffic stop data across racial groups, these differences suggest that pedestrian-stop patterns are not uniform across cities: some cities show larger variation by race than others. While these proportions highlight disparities in how different groups experience pedestrian stops, additional information such as specific population size would be needed to determine whether these patterns reflect broader inequities or simply differences in who is walking or present in public spaces.
+
+The datasets I used for this analysis were drawn from the following source:
+
+Pierson, E., Simoiu, C., Overgoor, J., Corbett-Davies, S., Ramachandran, V., Phillips, C., & Goel, S. (2020). A large-scale analysis of racial disparities in police stops across the United States. Nature Human Behaviour, 4(7), 736–745. Stanford Open Policing Project (2020). Traffic stops database. <https://openpolicing.stanford.edu/>
