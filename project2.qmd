@@ -140,7 +140,7 @@ Over time, Netflix has shifted to an increasing number of TV shows comparing to 
 
 One thing to be mindful of, is that the number of samples is limited from the 1940s to the 1990s, which explains why the values we see are so extreme, but don't exactly reflect reality.
 
-Shivan Bansal scrapeed this data and made it publicly available on Kaggle at the following link:
+Shivan Bansal scraped this data and made it publicly available on Kaggle at the following link:
 
 <https://www.kaggle.com/datasets/shivamb/netflix-shows>
 

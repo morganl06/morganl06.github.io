@@ -8,21 +8,81 @@ format:
     slide-number: true
     show-slide-number: all
     embed-resources: true
+    footer: "<a href='https://morganl06.github.io/' target='_blank'>Back to website </a>"
 execute:
   echo: true
   warning: false
   message: false
 ---
 
-<div style="position:fixed; top:10px; right:10px;">
-  <a href="index.html" target="_blank">Back to Website</a>
-</div>
----
+## **Background**
 
-## 
+-   Netflix launched a public competition in 2006, goal is to predict how a user would rate a movie they hadn’t seen (split by team, \$1million in prize money if you can improve system by 10%).
 
-# ##context 
+-   Goal: improve movie recommendation algorithms that work using predictions based on what a user has previously watched
 
-#\| fig-alt: my text =\> not printed, lives in the html file
+-   Part of Netflix’s broader push to personalize user experience, increasing use of the platform, and user satisfaction
 
-fig-cap is the caption printed to the screen
+## **Methods**
+
+-   500,000 users
+
+-   About 17,770 movies rated on a scale of 1-5 (1 being "dislike", 5 being "love) with associated timestamp of rating, movie ID, user ID and account information
+
+    =\> user ID and account information were removed for release for this competition
+
+## **Terms of service and consent**
+
+-   Netflix never notified users about the data release for this competition
+
+-   No explicit permission
+
+-   Assumed anonymization = consent (assuming it is safe because names were removed)
+
+-   Terms of service at the time allowed data use for “improving services,” ensured it wasn't for public release
+
+## **Deanonymization**
+
+-   Narayanan & Shmatikov (computer scientists, with expertise in data privacy) re-identified users in 2008 by matching Netflix ratings with public IMDb ratings
+
+-   Only needed a few movies + approximate timestamps to identify people (each set of movies watched by an individual is unique)
+
+-   High accuracy: Netflix records could be linked to specific individuals
+
+-   Revealed personal preferences (politics, sexuality, religion, etc.) through viewing history
+
+## **Hidden identifiers**
+
+-   Names removed, but unique behavioral fingerprints remained
+
+-   Timestamps, movies rated and rating styles (what a "good" movie's rating is) are unique
+
+-   Mosaicking: combining datasets from different sources to re-identify users
+
+## **Bias**
+
+-   Dataset is biased toward:
+
+    -   heavy users
+
+    -   highly engaged users
+
+    -   specific demographics (more men, younger population, highly educated groups)
+
+## **Why does this matter?**
+
+-   Shows how “anonymous” data can still identify people
+
+-   Proves removing names ≠ privacy
+
+-   Demonstrates potential risks of secondary use (use for other purposes)
+
+-   Exposes power imbalance: companies control data, users don’t
+
+-   It is a good case study for privacy risks =\> companies implement stricter consent policies\
+
+## **Why was I interested in this?** 
+
+-   Expands on stakes of another class I'm taking covering themes of ethics, surveillance and privacy
+
+-   Netflix User

@@ -31,24 +31,26 @@ con_traffic <- DBI::dbConnect(
 
 ```
 
-```{r, warning = FALSE, message = FALSE}
-
-ca_combined_summary <- dbGetQuery(con_traffic, "
-SELECT city, subject_race AS race, EXTRACT(YEAR FROM date) AS year,
-       COUNT(*) AS n_stops,
-       SUM(CASE WHEN type = 'vehicular' THEN 1 ELSE 0 END) AS vehicular_stops,
-       SUM(CASE WHEN type = 'pedestrian' THEN 1 ELSE 0 END) AS pedestrian_stops
+```{sql connection=con_traffic, output.var = "ca_combined_summary"}
+SELECT 
+    city,
+    subject_race AS race,
+    COUNT(*) AS n_stops,
+    SUM(CASE WHEN type = 'vehicular' THEN 1 ELSE 0 END) AS vehicular_stops,
+    SUM(CASE WHEN type = 'pedestrian' THEN 1 ELSE 0 END) AS pedestrian_stops
 FROM (
-    SELECT subject_race, date, type, 'San Francisco' AS city FROM ca_san_francisco_2020_04_01
+    SELECT subject_race, date, type, 'San Francisco' AS city 
+      FROM ca_san_francisco_2020_04_01
     UNION ALL
-    SELECT subject_race, date, type, 'Oakland' AS city FROM ca_oakland_2020_04_01
+    SELECT subject_race, date, type, 'Oakland' AS city 
+      FROM ca_oakland_2020_04_01
     UNION ALL
-    SELECT subject_race, date, type, 'San Jose' AS city FROM ca_san_jose_2020_04_01
+    SELECT subject_race, date, type, 'San Jose' AS city 
+      FROM ca_san_jose_2020_04_01
 ) AS combined
 WHERE subject_race IS NOT NULL
-GROUP BY city, race, year
-ORDER BY city, race, year
-")
+GROUP BY city, race
+ORDER BY city, race;
 ```
 
 ```{r, warning = FALSE, message = FALSE}
@@ -58,7 +60,7 @@ library(ggplot2)
 ggplot(ca_combined_summary, aes(x = race, y = n_stops, fill = city)) +
   geom_col(position = "dodge") +
   labs(
-    title = "Traffic Stops by Race — 3 California Cities",
+    title = "Traffic Stops by Race in San Francisco, Oakland, and San Jose",
     x = "Race",
     y = "Number of Stops",
     fill = "City"
@@ -68,47 +70,59 @@ ggplot(ca_combined_summary, aes(x = race, y = n_stops, fill = city)) +
 
 ```
 
-This graph compares the total number of traffic stops among racial groups in San Francisco, Oakland, and San Jose. In San Francisco, white drivers account for the highest number of stops. In Oakland, Black drivers are stopped most often, while in San Jose Hispanic drivers experience the highest number of stops.
+This graph compares the total number of traffic stops for each racial group in San Francisco, Oakland, and San Jose. The pattern differs substantially across cities: San Francisco shows the highest number of stops for white individuals, Oakland shows the highest stop count for Black individuals, and San Jose has the highest stop count for Hispanic individuals.
 
-These differences show that the racial distribution of traffic stops varies substantially across these three cities. Because the population sizes and racial compositions of these cities differ, the raw number of stops cannot be interpreted as “rates,” but the variation still highlights that each city’s policing patterns affect groups differently. The higher stop counts for certain racial groups, particularly Black drivers in Oakland, suggest that disparities may exist, though additional context (like population-adjusted rates or stop-risk calculations) would be needed to determine whether these differences reflect systemic inequities or simply demographic differences.
+These differences highlight that racial distributions in stop counts are not uniform across the three cities. However, interpreting these patterns requires caution, because each city has a different population size and racial composition. The raw stop counts cannot be interpreted as “stop rates,” and they do not directly indicate disparities on their own. Instead, the variation suggests that each city’s combination of demographics, policing strategies, and enforcement contexts may shape the overall distribution of stops. Additional population-adjusted calculations would be necessary to determine whether these differences reflect disproportionate impact or simply reflect the underlying demographics of each city.
 
-```{r,warning = FALSE, message = FALSE}
+```{sql connection=con_traffic, output.var="ca_plot2"}
+
+SELECT 
+    city,
+    race,
+    SUM(n_stops) AS total_stops,
+    SUM(pedestrian_stops) AS total_pedestrian,
+    100.0 * SUM(pedestrian_stops) / SUM(n_stops) AS pedestrian_pct
+FROM (
+    SELECT 
+        city,
+        subject_race AS race,
+        COUNT(*) AS n_stops,
+        SUM(CASE WHEN type = 'pedestrian' THEN 1 ELSE 0 END) AS pedestrian_stops
+    FROM (
+        SELECT subject_race, type, 'San Francisco' AS city
+        FROM ca_san_francisco_2020_04_01
+        UNION ALL
+        SELECT subject_race, type, 'Oakland' AS city
+        FROM ca_oakland_2020_04_01
+        UNION ALL
+        SELECT subject_race, type, 'San Jose' AS city
+        FROM ca_san_jose_2020_04_01
+    ) AS combined
+    WHERE subject_race IS NOT NULL
+    GROUP BY city, subject_race
+) AS grouped
+GROUP BY city, race
+ORDER BY city, race;
+```
+
+```{r, warning = FALSE, message = FALSE}
 
 library(ggplot2)
 library(dplyr)
 
-ca_plot2 <- ca_combined_summary |>
-  group_by(city, race) |>
-  summarise(
-    total_stops = sum(n_stops),
-    total_pedestrian = sum(pedestrian_stops),
-    .groups = "drop"
-  ) |>
-  mutate(pedestrian_pct = 100 * total_pedestrian / total_stops)
-
-ca_plot2$race <- factor(ca_plot2$race, levels = sort(unique(ca_plot2$race)))
-
-
 ggplot(ca_plot2, aes(x = race, y = pedestrian_pct, fill = city)) +
-  geom_col(position = "dodge") +
-  labs(
-    title = "Proportion of Pedestrian Stops by Race — 3 CA Cities",
-    x = "Race",
-    y = "Percent Pedestrian Stops",
-    fill = "City"
-  ) +
-  theme_minimal() +
-  theme(
-    axis.text.x = element_text(angle = 45, hjust = 1),
-    panel.grid.major.x = element_blank()
-  )
+geom_col(position = "dodge") +
+labs(
+title = "Percent of Stops that Are Pedestrian Stops",
+x = "Race",
+y = "Pedestrian Stop Percentage"
+) +
+theme_minimal()
 ```
 
-This plot shows the percentage of all stops that are pedestrian stops for each racial group in San Francisco, Oakland, and San Jose. San Francisco has no pedestrian-stop data in this dataset, so only Oakland and San Jose appear in the comparison.
+This graph shows the percentage of all stops that were pedestrian stops for each racial group across the three cities. The distribution varies by city. In San Jose, Black individuals have a noticeably higher share of pedestrian stops compared with Asian/Pacific Islander individuals, suggesting racial differences in how pedestrian versus vehicular stops occur. In Oakland, the percentages across racial groups are more similar, indicating that pedestrian stops there are not concentrated among any single group. San Francisco shows no pedestrian-stop data in this dataset, which limits cross-city comparisons and highlights differences in reporting or enforcement practices.
 
-In San Jose, the proportion of stops that are pedestrian stops varies across racial groups—for example, Black individuals have a noticeably higher proportion than Asian/Pacific Islander individuals. In Oakland, however, the proportions are more similar across racial groups, with no large differences visible.
-
-Similarly to the overlal traffic stop data across racial groups, these differences suggest that pedestrian-stop patterns are not uniform across cities: some cities show larger variation by race than others. While these proportions highlight disparities in how different groups experience pedestrian stops, additional information such as specific population size would be needed to determine whether these patterns reflect broader inequities or simply differences in who is walking or present in public spaces.
+These observations point to meaningful variation in how cities conduct pedestrian stops, but they do not directly show whether the differences result from demographics, law enforcement strategy, neighborhood patterns, or other factors. To determine whether the differences reflect inequitable policing, additional contextual information—such as pedestrian population estimates or neighborhood-level exposure—would be necessary.
 
 The datasets I used for this analysis were drawn from the following source:
 

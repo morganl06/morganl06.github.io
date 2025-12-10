@@ -240,25 +240,28 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <span id="cb1-17"><a href="#cb1-17" aria-hidden="true" tabindex="-1"></a>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </details>
 </div>
-<div class="cell">
+<div class="cell" data-output.var="ca_combined_summary">
 <details class="code-fold">
 <summary>Code</summary>
-<div class="sourceCode cell-code" id="cb2"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a>ca_combined_summary <span class="ot">&lt;-</span> <span class="fu">dbGetQuery</span>(con_traffic, <span class="st">"</span></span>
-<span id="cb2-2"><a href="#cb2-2" aria-hidden="true" tabindex="-1"></a><span class="st">SELECT city, subject_race AS race, EXTRACT(YEAR FROM date) AS year,</span></span>
-<span id="cb2-3"><a href="#cb2-3" aria-hidden="true" tabindex="-1"></a><span class="st">       COUNT(*) AS n_stops,</span></span>
-<span id="cb2-4"><a href="#cb2-4" aria-hidden="true" tabindex="-1"></a><span class="st">       SUM(CASE WHEN type = 'vehicular' THEN 1 ELSE 0 END) AS vehicular_stops,</span></span>
-<span id="cb2-5"><a href="#cb2-5" aria-hidden="true" tabindex="-1"></a><span class="st">       SUM(CASE WHEN type = 'pedestrian' THEN 1 ELSE 0 END) AS pedestrian_stops</span></span>
-<span id="cb2-6"><a href="#cb2-6" aria-hidden="true" tabindex="-1"></a><span class="st">FROM (</span></span>
-<span id="cb2-7"><a href="#cb2-7" aria-hidden="true" tabindex="-1"></a><span class="st">    SELECT subject_race, date, type, 'San Francisco' AS city FROM ca_san_francisco_2020_04_01</span></span>
-<span id="cb2-8"><a href="#cb2-8" aria-hidden="true" tabindex="-1"></a><span class="st">    UNION ALL</span></span>
-<span id="cb2-9"><a href="#cb2-9" aria-hidden="true" tabindex="-1"></a><span class="st">    SELECT subject_race, date, type, 'Oakland' AS city FROM ca_oakland_2020_04_01</span></span>
-<span id="cb2-10"><a href="#cb2-10" aria-hidden="true" tabindex="-1"></a><span class="st">    UNION ALL</span></span>
-<span id="cb2-11"><a href="#cb2-11" aria-hidden="true" tabindex="-1"></a><span class="st">    SELECT subject_race, date, type, 'San Jose' AS city FROM ca_san_jose_2020_04_01</span></span>
-<span id="cb2-12"><a href="#cb2-12" aria-hidden="true" tabindex="-1"></a><span class="st">) AS combined</span></span>
-<span id="cb2-13"><a href="#cb2-13" aria-hidden="true" tabindex="-1"></a><span class="st">WHERE subject_race IS NOT NULL</span></span>
-<span id="cb2-14"><a href="#cb2-14" aria-hidden="true" tabindex="-1"></a><span class="st">GROUP BY city, race, year</span></span>
-<span id="cb2-15"><a href="#cb2-15" aria-hidden="true" tabindex="-1"></a><span class="st">ORDER BY city, race, year</span></span>
-<span id="cb2-16"><a href="#cb2-16" aria-hidden="true" tabindex="-1"></a><span class="st">"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb2"><pre class="sourceCode sql code-with-copy"><code class="sourceCode sql"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a><span class="kw">SELECT</span> </span>
+<span id="cb2-2"><a href="#cb2-2" aria-hidden="true" tabindex="-1"></a>    city,</span>
+<span id="cb2-3"><a href="#cb2-3" aria-hidden="true" tabindex="-1"></a>    subject_race <span class="kw">AS</span> race,</span>
+<span id="cb2-4"><a href="#cb2-4" aria-hidden="true" tabindex="-1"></a>    <span class="fu">COUNT</span>(<span class="op">*</span>) <span class="kw">AS</span> n_stops,</span>
+<span id="cb2-5"><a href="#cb2-5" aria-hidden="true" tabindex="-1"></a>    <span class="fu">SUM</span>(<span class="cf">CASE</span> <span class="cf">WHEN</span> <span class="kw">type</span> <span class="op">=</span> <span class="st">'vehicular'</span> <span class="cf">THEN</span> <span class="dv">1</span> <span class="cf">ELSE</span> <span class="dv">0</span> <span class="cf">END</span>) <span class="kw">AS</span> vehicular_stops,</span>
+<span id="cb2-6"><a href="#cb2-6" aria-hidden="true" tabindex="-1"></a>    <span class="fu">SUM</span>(<span class="cf">CASE</span> <span class="cf">WHEN</span> <span class="kw">type</span> <span class="op">=</span> <span class="st">'pedestrian'</span> <span class="cf">THEN</span> <span class="dv">1</span> <span class="cf">ELSE</span> <span class="dv">0</span> <span class="cf">END</span>) <span class="kw">AS</span> pedestrian_stops</span>
+<span id="cb2-7"><a href="#cb2-7" aria-hidden="true" tabindex="-1"></a><span class="kw">FROM</span> (</span>
+<span id="cb2-8"><a href="#cb2-8" aria-hidden="true" tabindex="-1"></a>    <span class="kw">SELECT</span> subject_race, <span class="dt">date</span>, <span class="kw">type</span>, <span class="st">'San Francisco'</span> <span class="kw">AS</span> city </span>
+<span id="cb2-9"><a href="#cb2-9" aria-hidden="true" tabindex="-1"></a>      <span class="kw">FROM</span> ca_san_francisco_2020_04_01</span>
+<span id="cb2-10"><a href="#cb2-10" aria-hidden="true" tabindex="-1"></a>    <span class="kw">UNION</span> <span class="kw">ALL</span></span>
+<span id="cb2-11"><a href="#cb2-11" aria-hidden="true" tabindex="-1"></a>    <span class="kw">SELECT</span> subject_race, <span class="dt">date</span>, <span class="kw">type</span>, <span class="st">'Oakland'</span> <span class="kw">AS</span> city </span>
+<span id="cb2-12"><a href="#cb2-12" aria-hidden="true" tabindex="-1"></a>      <span class="kw">FROM</span> ca_oakland_2020_04_01</span>
+<span id="cb2-13"><a href="#cb2-13" aria-hidden="true" tabindex="-1"></a>    <span class="kw">UNION</span> <span class="kw">ALL</span></span>
+<span id="cb2-14"><a href="#cb2-14" aria-hidden="true" tabindex="-1"></a>    <span class="kw">SELECT</span> subject_race, <span class="dt">date</span>, <span class="kw">type</span>, <span class="st">'San Jose'</span> <span class="kw">AS</span> city </span>
+<span id="cb2-15"><a href="#cb2-15" aria-hidden="true" tabindex="-1"></a>      <span class="kw">FROM</span> ca_san_jose_2020_04_01</span>
+<span id="cb2-16"><a href="#cb2-16" aria-hidden="true" tabindex="-1"></a>) <span class="kw">AS</span> combined</span>
+<span id="cb2-17"><a href="#cb2-17" aria-hidden="true" tabindex="-1"></a><span class="kw">WHERE</span> subject_race <span class="kw">IS</span> <span class="kw">NOT</span> <span class="kw">NULL</span></span>
+<span id="cb2-18"><a href="#cb2-18" aria-hidden="true" tabindex="-1"></a><span class="kw">GROUP</span> <span class="kw">BY</span> city, race</span>
+<span id="cb2-19"><a href="#cb2-19" aria-hidden="true" tabindex="-1"></a><span class="kw">ORDER</span> <span class="kw">BY</span> city, race;</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </details>
 </div>
 <div class="cell">
@@ -269,7 +272,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <span id="cb3-3"><a href="#cb3-3" aria-hidden="true" tabindex="-1"></a><span class="fu">ggplot</span>(ca_combined_summary, <span class="fu">aes</span>(<span class="at">x =</span> race, <span class="at">y =</span> n_stops, <span class="at">fill =</span> city)) <span class="sc">+</span></span>
 <span id="cb3-4"><a href="#cb3-4" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_col</span>(<span class="at">position =</span> <span class="st">"dodge"</span>) <span class="sc">+</span></span>
 <span id="cb3-5"><a href="#cb3-5" aria-hidden="true" tabindex="-1"></a>  <span class="fu">labs</span>(</span>
-<span id="cb3-6"><a href="#cb3-6" aria-hidden="true" tabindex="-1"></a>    <span class="at">title =</span> <span class="st">"Traffic Stops by Race — 3 California Cities"</span>,</span>
+<span id="cb3-6"><a href="#cb3-6" aria-hidden="true" tabindex="-1"></a>    <span class="at">title =</span> <span class="st">"Traffic Stops by Race in San Francisco, Oakland, and San Jose"</span>,</span>
 <span id="cb3-7"><a href="#cb3-7" aria-hidden="true" tabindex="-1"></a>    <span class="at">x =</span> <span class="st">"Race"</span>,</span>
 <span id="cb3-8"><a href="#cb3-8" aria-hidden="true" tabindex="-1"></a>    <span class="at">y =</span> <span class="st">"Number of Stops"</span>,</span>
 <span id="cb3-9"><a href="#cb3-9" aria-hidden="true" tabindex="-1"></a>    <span class="at">fill =</span> <span class="st">"City"</span></span>
@@ -285,51 +288,66 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 </div>
 </div>
 </div>
-<p>This graph compares the total number of traffic stops among racial groups in San Francisco, Oakland, and San Jose. In San Francisco, white drivers account for the highest number of stops. In Oakland, Black drivers are stopped most often, while in San Jose Hispanic drivers experience the highest number of stops.</p>
-<p>These differences show that the racial distribution of traffic stops varies substantially across these three cities. Because the population sizes and racial compositions of these cities differ, the raw number of stops cannot be interpreted as “rates,” but the variation still highlights that each city’s policing patterns affect groups differently. The higher stop counts for certain racial groups, particularly Black drivers in Oakland, suggest that disparities may exist, though additional context (like population-adjusted rates or stop-risk calculations) would be needed to determine whether these differences reflect systemic inequities or simply demographic differences.</p>
+<p>This graph compares the total number of traffic stops for each racial group in San Francisco, Oakland, and San Jose. The pattern differs substantially across cities: San Francisco shows the highest number of stops for white individuals, Oakland shows the highest stop count for Black individuals, and San Jose has the highest stop count for Hispanic individuals.</p>
+<p>These differences highlight that racial distributions in stop counts are not uniform across the three cities. However, interpreting these patterns requires caution, because each city has a different population size and racial composition. The raw stop counts cannot be interpreted as “stop rates,” and they do not directly indicate disparities on their own. Instead, the variation suggests that each city’s combination of demographics, policing strategies, and enforcement contexts may shape the overall distribution of stops. Additional population-adjusted calculations would be necessary to determine whether these differences reflect disproportionate impact or simply reflect the underlying demographics of each city.</p>
+<div class="cell" data-output.var="ca_plot2">
+<details class="code-fold">
+<summary>Code</summary>
+<div class="sourceCode cell-code" id="cb4"><pre class="sourceCode sql code-with-copy"><code class="sourceCode sql"><span id="cb4-1"><a href="#cb4-1" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb4-2"><a href="#cb4-2" aria-hidden="true" tabindex="-1"></a><span class="kw">SELECT</span> </span>
+<span id="cb4-3"><a href="#cb4-3" aria-hidden="true" tabindex="-1"></a>    city,</span>
+<span id="cb4-4"><a href="#cb4-4" aria-hidden="true" tabindex="-1"></a>    race,</span>
+<span id="cb4-5"><a href="#cb4-5" aria-hidden="true" tabindex="-1"></a>    <span class="fu">SUM</span>(n_stops) <span class="kw">AS</span> total_stops,</span>
+<span id="cb4-6"><a href="#cb4-6" aria-hidden="true" tabindex="-1"></a>    <span class="fu">SUM</span>(pedestrian_stops) <span class="kw">AS</span> total_pedestrian,</span>
+<span id="cb4-7"><a href="#cb4-7" aria-hidden="true" tabindex="-1"></a>    <span class="fl">100.0</span> <span class="op">*</span> <span class="fu">SUM</span>(pedestrian_stops) <span class="op">/</span> <span class="fu">SUM</span>(n_stops) <span class="kw">AS</span> pedestrian_pct</span>
+<span id="cb4-8"><a href="#cb4-8" aria-hidden="true" tabindex="-1"></a><span class="kw">FROM</span> (</span>
+<span id="cb4-9"><a href="#cb4-9" aria-hidden="true" tabindex="-1"></a>    <span class="kw">SELECT</span> </span>
+<span id="cb4-10"><a href="#cb4-10" aria-hidden="true" tabindex="-1"></a>        city,</span>
+<span id="cb4-11"><a href="#cb4-11" aria-hidden="true" tabindex="-1"></a>        subject_race <span class="kw">AS</span> race,</span>
+<span id="cb4-12"><a href="#cb4-12" aria-hidden="true" tabindex="-1"></a>        <span class="fu">COUNT</span>(<span class="op">*</span>) <span class="kw">AS</span> n_stops,</span>
+<span id="cb4-13"><a href="#cb4-13" aria-hidden="true" tabindex="-1"></a>        <span class="fu">SUM</span>(<span class="cf">CASE</span> <span class="cf">WHEN</span> <span class="kw">type</span> <span class="op">=</span> <span class="st">'pedestrian'</span> <span class="cf">THEN</span> <span class="dv">1</span> <span class="cf">ELSE</span> <span class="dv">0</span> <span class="cf">END</span>) <span class="kw">AS</span> pedestrian_stops</span>
+<span id="cb4-14"><a href="#cb4-14" aria-hidden="true" tabindex="-1"></a>    <span class="kw">FROM</span> (</span>
+<span id="cb4-15"><a href="#cb4-15" aria-hidden="true" tabindex="-1"></a>        <span class="kw">SELECT</span> subject_race, <span class="kw">type</span>, <span class="st">'San Francisco'</span> <span class="kw">AS</span> city</span>
+<span id="cb4-16"><a href="#cb4-16" aria-hidden="true" tabindex="-1"></a>        <span class="kw">FROM</span> ca_san_francisco_2020_04_01</span>
+<span id="cb4-17"><a href="#cb4-17" aria-hidden="true" tabindex="-1"></a>        <span class="kw">UNION</span> <span class="kw">ALL</span></span>
+<span id="cb4-18"><a href="#cb4-18" aria-hidden="true" tabindex="-1"></a>        <span class="kw">SELECT</span> subject_race, <span class="kw">type</span>, <span class="st">'Oakland'</span> <span class="kw">AS</span> city</span>
+<span id="cb4-19"><a href="#cb4-19" aria-hidden="true" tabindex="-1"></a>        <span class="kw">FROM</span> ca_oakland_2020_04_01</span>
+<span id="cb4-20"><a href="#cb4-20" aria-hidden="true" tabindex="-1"></a>        <span class="kw">UNION</span> <span class="kw">ALL</span></span>
+<span id="cb4-21"><a href="#cb4-21" aria-hidden="true" tabindex="-1"></a>        <span class="kw">SELECT</span> subject_race, <span class="kw">type</span>, <span class="st">'San Jose'</span> <span class="kw">AS</span> city</span>
+<span id="cb4-22"><a href="#cb4-22" aria-hidden="true" tabindex="-1"></a>        <span class="kw">FROM</span> ca_san_jose_2020_04_01</span>
+<span id="cb4-23"><a href="#cb4-23" aria-hidden="true" tabindex="-1"></a>    ) <span class="kw">AS</span> combined</span>
+<span id="cb4-24"><a href="#cb4-24" aria-hidden="true" tabindex="-1"></a>    <span class="kw">WHERE</span> subject_race <span class="kw">IS</span> <span class="kw">NOT</span> <span class="kw">NULL</span></span>
+<span id="cb4-25"><a href="#cb4-25" aria-hidden="true" tabindex="-1"></a>    <span class="kw">GROUP</span> <span class="kw">BY</span> city, subject_race</span>
+<span id="cb4-26"><a href="#cb4-26" aria-hidden="true" tabindex="-1"></a>) <span class="kw">AS</span> grouped</span>
+<span id="cb4-27"><a href="#cb4-27" aria-hidden="true" tabindex="-1"></a><span class="kw">GROUP</span> <span class="kw">BY</span> city, race</span>
+<span id="cb4-28"><a href="#cb4-28" aria-hidden="true" tabindex="-1"></a><span class="kw">ORDER</span> <span class="kw">BY</span> city, race;</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</details>
+</div>
 <div class="cell">
 <details class="code-fold">
 <summary>Code</summary>
-<div class="sourceCode cell-code" id="cb4"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb4-1"><a href="#cb4-1" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(ggplot2)</span>
-<span id="cb4-2"><a href="#cb4-2" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(dplyr)</span>
-<span id="cb4-3"><a href="#cb4-3" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb4-4"><a href="#cb4-4" aria-hidden="true" tabindex="-1"></a>ca_plot2 <span class="ot">&lt;-</span> ca_combined_summary <span class="sc">|&gt;</span></span>
-<span id="cb4-5"><a href="#cb4-5" aria-hidden="true" tabindex="-1"></a>  <span class="fu">group_by</span>(city, race) <span class="sc">|&gt;</span></span>
-<span id="cb4-6"><a href="#cb4-6" aria-hidden="true" tabindex="-1"></a>  <span class="fu">summarise</span>(</span>
-<span id="cb4-7"><a href="#cb4-7" aria-hidden="true" tabindex="-1"></a>    <span class="at">total_stops =</span> <span class="fu">sum</span>(n_stops),</span>
-<span id="cb4-8"><a href="#cb4-8" aria-hidden="true" tabindex="-1"></a>    <span class="at">total_pedestrian =</span> <span class="fu">sum</span>(pedestrian_stops),</span>
-<span id="cb4-9"><a href="#cb4-9" aria-hidden="true" tabindex="-1"></a>    <span class="at">.groups =</span> <span class="st">"drop"</span></span>
-<span id="cb4-10"><a href="#cb4-10" aria-hidden="true" tabindex="-1"></a>  ) <span class="sc">|&gt;</span></span>
-<span id="cb4-11"><a href="#cb4-11" aria-hidden="true" tabindex="-1"></a>  <span class="fu">mutate</span>(<span class="at">pedestrian_pct =</span> <span class="dv">100</span> <span class="sc">*</span> total_pedestrian <span class="sc">/</span> total_stops)</span>
-<span id="cb4-12"><a href="#cb4-12" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb4-13"><a href="#cb4-13" aria-hidden="true" tabindex="-1"></a>ca_plot2<span class="sc">$</span>race <span class="ot">&lt;-</span> <span class="fu">factor</span>(ca_plot2<span class="sc">$</span>race, <span class="at">levels =</span> <span class="fu">sort</span>(<span class="fu">unique</span>(ca_plot2<span class="sc">$</span>race)))</span>
-<span id="cb4-14"><a href="#cb4-14" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb4-15"><a href="#cb4-15" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb4-16"><a href="#cb4-16" aria-hidden="true" tabindex="-1"></a><span class="fu">ggplot</span>(ca_plot2, <span class="fu">aes</span>(<span class="at">x =</span> race, <span class="at">y =</span> pedestrian_pct, <span class="at">fill =</span> city)) <span class="sc">+</span></span>
-<span id="cb4-17"><a href="#cb4-17" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_col</span>(<span class="at">position =</span> <span class="st">"dodge"</span>) <span class="sc">+</span></span>
-<span id="cb4-18"><a href="#cb4-18" aria-hidden="true" tabindex="-1"></a>  <span class="fu">labs</span>(</span>
-<span id="cb4-19"><a href="#cb4-19" aria-hidden="true" tabindex="-1"></a>    <span class="at">title =</span> <span class="st">"Proportion of Pedestrian Stops by Race — 3 CA Cities"</span>,</span>
-<span id="cb4-20"><a href="#cb4-20" aria-hidden="true" tabindex="-1"></a>    <span class="at">x =</span> <span class="st">"Race"</span>,</span>
-<span id="cb4-21"><a href="#cb4-21" aria-hidden="true" tabindex="-1"></a>    <span class="at">y =</span> <span class="st">"Percent Pedestrian Stops"</span>,</span>
-<span id="cb4-22"><a href="#cb4-22" aria-hidden="true" tabindex="-1"></a>    <span class="at">fill =</span> <span class="st">"City"</span></span>
-<span id="cb4-23"><a href="#cb4-23" aria-hidden="true" tabindex="-1"></a>  ) <span class="sc">+</span></span>
-<span id="cb4-24"><a href="#cb4-24" aria-hidden="true" tabindex="-1"></a>  <span class="fu">theme_minimal</span>() <span class="sc">+</span></span>
-<span id="cb4-25"><a href="#cb4-25" aria-hidden="true" tabindex="-1"></a>  <span class="fu">theme</span>(</span>
-<span id="cb4-26"><a href="#cb4-26" aria-hidden="true" tabindex="-1"></a>    <span class="at">axis.text.x =</span> <span class="fu">element_text</span>(<span class="at">angle =</span> <span class="dv">45</span>, <span class="at">hjust =</span> <span class="dv">1</span>),</span>
-<span id="cb4-27"><a href="#cb4-27" aria-hidden="true" tabindex="-1"></a>    <span class="at">panel.grid.major.x =</span> <span class="fu">element_blank</span>()</span>
-<span id="cb4-28"><a href="#cb4-28" aria-hidden="true" tabindex="-1"></a>  )</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb5"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb5-1"><a href="#cb5-1" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(ggplot2)</span>
+<span id="cb5-2"><a href="#cb5-2" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(dplyr)</span>
+<span id="cb5-3"><a href="#cb5-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb5-4"><a href="#cb5-4" aria-hidden="true" tabindex="-1"></a><span class="fu">ggplot</span>(ca_plot2, <span class="fu">aes</span>(<span class="at">x =</span> race, <span class="at">y =</span> pedestrian_pct, <span class="at">fill =</span> city)) <span class="sc">+</span></span>
+<span id="cb5-5"><a href="#cb5-5" aria-hidden="true" tabindex="-1"></a><span class="fu">geom_col</span>(<span class="at">position =</span> <span class="st">"dodge"</span>) <span class="sc">+</span></span>
+<span id="cb5-6"><a href="#cb5-6" aria-hidden="true" tabindex="-1"></a><span class="fu">labs</span>(</span>
+<span id="cb5-7"><a href="#cb5-7" aria-hidden="true" tabindex="-1"></a><span class="at">title =</span> <span class="st">"Percent of Stops that Are Pedestrian Stops"</span>,</span>
+<span id="cb5-8"><a href="#cb5-8" aria-hidden="true" tabindex="-1"></a><span class="at">x =</span> <span class="st">"Race"</span>,</span>
+<span id="cb5-9"><a href="#cb5-9" aria-hidden="true" tabindex="-1"></a><span class="at">y =</span> <span class="st">"Pedestrian Stop Percentage"</span></span>
+<span id="cb5-10"><a href="#cb5-10" aria-hidden="true" tabindex="-1"></a>) <span class="sc">+</span></span>
+<span id="cb5-11"><a href="#cb5-11" aria-hidden="true" tabindex="-1"></a><span class="fu">theme_minimal</span>()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </details>
 <div class="cell-output-display">
 <div>
 <figure class="figure">
-<p><img src="project5_files/figure-html/unnamed-chunk-4-1.png" class="img-fluid figure-img" width="672"></p>
+<p><img src="project5_files/figure-html/unnamed-chunk-5-1.png" class="img-fluid figure-img" width="672"></p>
 </figure>
 </div>
 </div>
 </div>
-<p>This plot shows the percentage of all stops that are pedestrian stops for each racial group in San Francisco, Oakland, and San Jose. San Francisco has no pedestrian-stop data in this dataset, so only Oakland and San Jose appear in the comparison.</p>
-<p>In San Jose, the proportion of stops that are pedestrian stops varies across racial groups—for example, Black individuals have a noticeably higher proportion than Asian/Pacific Islander individuals. In Oakland, however, the proportions are more similar across racial groups, with no large differences visible.</p>
-<p>Similarly to the overlal traffic stop data across racial groups, these differences suggest that pedestrian-stop patterns are not uniform across cities: some cities show larger variation by race than others. While these proportions highlight disparities in how different groups experience pedestrian stops, additional information such as specific population size would be needed to determine whether these patterns reflect broader inequities or simply differences in who is walking or present in public spaces.</p>
+<p>This graph shows the percentage of all stops that were pedestrian stops for each racial group across the three cities. The distribution varies by city. In San Jose, Black individuals have a noticeably higher share of pedestrian stops compared with Asian/Pacific Islander individuals, suggesting racial differences in how pedestrian versus vehicular stops occur. In Oakland, the percentages across racial groups are more similar, indicating that pedestrian stops there are not concentrated among any single group. San Francisco shows no pedestrian-stop data in this dataset, which limits cross-city comparisons and highlights differences in reporting or enforcement practices.</p>
+<p>These observations point to meaningful variation in how cities conduct pedestrian stops, but they do not directly show whether the differences result from demographics, law enforcement strategy, neighborhood patterns, or other factors. To determine whether the differences reflect inequitable policing, additional contextual information—such as pedestrian population estimates or neighborhood-level exposure—would be necessary.</p>
 <p>The datasets I used for this analysis were drawn from the following source:</p>
 <p>Pierson, E., Simoiu, C., Overgoor, J., Corbett-Davies, S., Ramachandran, V., Phillips, C., &amp; Goel, S. (2020). A large-scale analysis of racial disparities in police stops across the United States. Nature Human Behaviour, 4(7), 736–745. Stanford Open Policing Project (2020). Traffic stops database. <a href="https://openpolicing.stanford.edu/" class="uri">https://openpolicing.stanford.edu/</a></p>
 
