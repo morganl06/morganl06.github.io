@@ -124,7 +124,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
             <ul class="navbar-nav navbar-nav-scroll me-auto">
   <li class="nav-item">
     <a class="nav-link" href="./index.html"> 
-<span class="menu-text">Welcome!</span></a>
+<span class="menu-text">Home</span></a>
   </li>  
   <li class="nav-item">
     <a class="nav-link" href="./about.html"> 
@@ -137,11 +137,11 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
     <ul class="dropdown-menu" aria-labelledby="nav-menu-data-viz">    
         <li>
     <a class="dropdown-item" href="./whales and dolphins.html">
- <span class="dropdown-text">Cetacean species</span></a>
+ <span class="dropdown-text">Cetacean species birth rate over time</span></a>
   </li>  
         <li>
     <a class="dropdown-item" href="./seasons.html">
- <span class="dropdown-text">American Idol Seasons</span></a>
+ <span class="dropdown-text">American Idol Seasons Judges Appearances</span></a>
   </li>  
         <li>
     <a class="dropdown-item" href="./project2.html">
@@ -157,7 +157,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
   </li>  
         <li>
     <a class="dropdown-item" href="./project5.html">
- <span class="dropdown-text">Racial disparities in traffic and pedestrian stops in three similar California cities</span></a>
+ <span class="dropdown-text">Racial disparities in traffic and pedestrian stops in Oakland and San Jose</span></a>
   </li>  
     </ul>
   </li>
@@ -225,124 +225,64 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <span id="cb1-4"><a href="#cb1-4" aria-hidden="true" tabindex="-1"></a><span class="fu">view</span>(global_mortality)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </details>
 </div>
-<p>This dataset presents the mortality rate for different diseases, per year (from 1990 to 2016) and per country. We are exploring the specific average rate of mortality from diabetes in the United States and in France across all years. The dataset I analyzed comes from the Tidy Tuesday database and is available at the following link. <a href="https://github.com/rfordatascience/tidytuesday/tree/main/data/2018/2018-04-16" class="uri">https://github.com/rfordatascience/tidytuesday/tree/main/data/2018/2018-04-16</a></p>
+<p>This dataset presents the mortality rate for different diseases, per year (from 1990 to 2016) and per country. We are exploring the specific average rate of mortality from diabetes in the United States and in France across all years. The dataset I analyzed comes from the Tidy Tuesday database and is available at the following link: <a href="https://github.com/rfordatascience/tidytuesday/tree/main/data/2018/2018-04-16" class="uri">https://github.com/rfordatascience/tidytuesday/tree/main/data/2018/2018-04-16</a></p>
 <p>The original data comes from an article entitled, “Causes of death” and published in the Our World in Data magazine by Saloni Dattani, Fiona Spooner, Hannah Ritchie and Max Roser at the following link: Dattani, S., Spooner, F., Ritchie, H., &amp; Roser, M. (2023). Causes of Death. <em>Our World in Data</em>. <a href="https://ourworldindata.org/causes-of-death" class="uri">https://ourworldindata.org/causes-of-death</a></p>
 <p>In this simulation study, we will explore whether France and the United States have the same average diabetes mortality rate. We will first calculate the observed difference in mean diabetes mortality between the two countries across all available years (1990-2016). To test whether the difference we observe could have been a result of random distribution, we will run a permutation test shuffling the diabetes mortality percentage rate per country 1000 times, to create a null distribution. By treating the observed years as a sample, we can use a permutation test to assess whether the observed difference in average mortality is larger than we would expect from random variation in yearly mortality. This allows us to generalize conclusions beyond the years in the dataset.</p>
-<p>The research question we are answering is the following: Do the US and France differ in underlying diabetes mortality rates, beyond what might occur by chance?</p>
+<p>The research question we are answering is the following: Do France and the United States differ in their underlying diabetes mortality processes, such that the observed differences in yearly diabetes mortality are larger than what we would expect due to random chance?</p>
 <p>The null hypothesis (Ho): The underlying process generating the diabetes mortality rate is the same in France and the US. Any observed difference in yearly mortality rates is due to random variation across years.</p>
 <p>The alternative hypothesis (Ha): The underlying process differs between the two countries, leading to different average diabetes mortality rates.</p>
 <div class="cell">
 <details class="code-fold">
 <summary>Code</summary>
 <div class="sourceCode cell-code" id="cb2"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(dplyr)</span>
-<span id="cb2-2"><a href="#cb2-2" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb2-3"><a href="#cb2-3" aria-hidden="true" tabindex="-1"></a>mortality_filtered <span class="ot">&lt;-</span> global_mortality <span class="sc">|&gt;</span></span>
-<span id="cb2-4"><a href="#cb2-4" aria-hidden="true" tabindex="-1"></a>  <span class="fu">filter</span>(country <span class="sc">%in%</span> <span class="fu">c</span>(<span class="st">"France"</span>, <span class="st">"United States"</span>)) <span class="sc">|&gt;</span></span>
-<span id="cb2-5"><a href="#cb2-5" aria-hidden="true" tabindex="-1"></a>  <span class="fu">select</span>(country, year, <span class="st">`</span><span class="at">Diabetes (%)</span><span class="st">`</span>)</span>
-<span id="cb2-6"><a href="#cb2-6" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb2-7"><a href="#cb2-7" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb2-8"><a href="#cb2-8" aria-hidden="true" tabindex="-1"></a>mortality_filtered <span class="ot">&lt;-</span> mortality_filtered <span class="sc">|&gt;</span></span>
-<span id="cb2-9"><a href="#cb2-9" aria-hidden="true" tabindex="-1"></a>  <span class="fu">rename</span>(<span class="at">diabetes_pct =</span> <span class="st">`</span><span class="at">Diabetes (%)</span><span class="st">`</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<span id="cb2-2"><a href="#cb2-2" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(ggplot2)</span>
+<span id="cb2-3"><a href="#cb2-3" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(readr)</span>
+<span id="cb2-4"><a href="#cb2-4" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb2-5"><a href="#cb2-5" aria-hidden="true" tabindex="-1"></a><span class="co"># Filter data for France and US, select relevant columns</span></span>
+<span id="cb2-6"><a href="#cb2-6" aria-hidden="true" tabindex="-1"></a>mortality_filtered <span class="ot">&lt;-</span> global_mortality <span class="sc">|&gt;</span></span>
+<span id="cb2-7"><a href="#cb2-7" aria-hidden="true" tabindex="-1"></a>  <span class="fu">filter</span>(country <span class="sc">%in%</span> <span class="fu">c</span>(<span class="st">"France"</span>, <span class="st">"United States"</span>)) <span class="sc">|&gt;</span></span>
+<span id="cb2-8"><a href="#cb2-8" aria-hidden="true" tabindex="-1"></a>  <span class="fu">select</span>(country, year, <span class="st">`</span><span class="at">Diabetes (%)</span><span class="st">`</span>) <span class="sc">|&gt;</span></span>
+<span id="cb2-9"><a href="#cb2-9" aria-hidden="true" tabindex="-1"></a>  <span class="fu">rename</span>(<span class="at">diabetes_pct =</span> <span class="st">`</span><span class="at">Diabetes (%)</span><span class="st">`</span>)  <span class="co"># rename column for easier handling</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </details>
 </div>
 <div class="cell">
 <details class="code-fold">
 <summary>Code</summary>
-<div class="sourceCode cell-code" id="cb3"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(dplyr)</span>
-<span id="cb3-2"><a href="#cb3-2" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(ggplot2)</span>
-<span id="cb3-3"><a href="#cb3-3" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(readr)</span>
-<span id="cb3-4"><a href="#cb3-4" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb3-5"><a href="#cb3-5" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(dplyr)</span>
-<span id="cb3-6"><a href="#cb3-6" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb3-7"><a href="#cb3-7" aria-hidden="true" tabindex="-1"></a>mortality_avg <span class="ot">&lt;-</span> mortality_filtered <span class="sc">|&gt;</span></span>
-<span id="cb3-8"><a href="#cb3-8" aria-hidden="true" tabindex="-1"></a>  <span class="fu">group_by</span>(country) <span class="sc">|&gt;</span></span>
-<span id="cb3-9"><a href="#cb3-9" aria-hidden="true" tabindex="-1"></a>  <span class="fu">summarize</span>(<span class="at">avg_diabetes =</span> <span class="fu">mean</span>(<span class="st">`</span><span class="at">diabetes_pct</span><span class="st">`</span>))</span>
-<span id="cb3-10"><a href="#cb3-10" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb3-11"><a href="#cb3-11" aria-hidden="true" tabindex="-1"></a>mortality_avg</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
-</details>
-<div class="cell-output cell-output-stdout">
-<pre><code># A tibble: 2 × 2
-  country       avg_diabetes
-  &lt;chr&gt;                &lt;dbl&gt;
-1 France                4.72
-2 United States         6.49</code></pre>
-</div>
-<details class="code-fold">
-<summary>Code</summary>
-<div class="sourceCode cell-code" id="cb5"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb5-1"><a href="#cb5-1" aria-hidden="true" tabindex="-1"></a><span class="fu">ggplot</span>(mortality_avg, <span class="fu">aes</span>(<span class="at">x =</span> country, <span class="at">y =</span> avg_diabetes, <span class="at">fill =</span> country)) <span class="sc">+</span></span>
-<span id="cb5-2"><a href="#cb5-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_col</span>(<span class="at">show.legend =</span> <span class="cn">FALSE</span>) <span class="sc">+</span></span>
-<span id="cb5-3"><a href="#cb5-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">labs</span>(<span class="at">title =</span> <span class="st">"Average Diabetes Mortality (%) Across All Years"</span>,</span>
-<span id="cb5-4"><a href="#cb5-4" aria-hidden="true" tabindex="-1"></a>       <span class="at">x =</span> <span class="st">"Country"</span>,</span>
-<span id="cb5-5"><a href="#cb5-5" aria-hidden="true" tabindex="-1"></a>       <span class="at">y =</span> <span class="st">"Average Diabetes Mortality (%)"</span>) <span class="sc">+</span></span>
-<span id="cb5-6"><a href="#cb5-6" aria-hidden="true" tabindex="-1"></a>  <span class="fu">theme_minimal</span>()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb3"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Compute average diabetes mortality per country</span></span>
+<span id="cb3-2"><a href="#cb3-2" aria-hidden="true" tabindex="-1"></a>mortality_avg <span class="ot">&lt;-</span> mortality_filtered <span class="sc">|&gt;</span></span>
+<span id="cb3-3"><a href="#cb3-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">group_by</span>(country) <span class="sc">|&gt;</span></span>
+<span id="cb3-4"><a href="#cb3-4" aria-hidden="true" tabindex="-1"></a>  <span class="fu">summarize</span>(<span class="at">avg_diabetes =</span> <span class="fu">mean</span>(diabetes_pct))</span>
+<span id="cb3-5"><a href="#cb3-5" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb3-6"><a href="#cb3-6" aria-hidden="true" tabindex="-1"></a><span class="co"># Plot the averages for visual comparison</span></span>
+<span id="cb3-7"><a href="#cb3-7" aria-hidden="true" tabindex="-1"></a><span class="fu">ggplot</span>(mortality_avg, <span class="fu">aes</span>(<span class="at">x =</span> country, <span class="at">y =</span> avg_diabetes, <span class="at">fill =</span> country)) <span class="sc">+</span></span>
+<span id="cb3-8"><a href="#cb3-8" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_col</span>(<span class="at">show.legend =</span> <span class="cn">FALSE</span>) <span class="sc">+</span></span>
+<span id="cb3-9"><a href="#cb3-9" aria-hidden="true" tabindex="-1"></a>  <span class="fu">labs</span>(</span>
+<span id="cb3-10"><a href="#cb3-10" aria-hidden="true" tabindex="-1"></a>    <span class="at">title =</span> <span class="st">"Average Diabetes Mortality (%) Across All Years"</span>,</span>
+<span id="cb3-11"><a href="#cb3-11" aria-hidden="true" tabindex="-1"></a>    <span class="at">x =</span> <span class="st">"Country"</span>,</span>
+<span id="cb3-12"><a href="#cb3-12" aria-hidden="true" tabindex="-1"></a>    <span class="at">y =</span> <span class="st">"Average Diabetes Mortality (%)"</span></span>
+<span id="cb3-13"><a href="#cb3-13" aria-hidden="true" tabindex="-1"></a>  ) <span class="sc">+</span></span>
+<span id="cb3-14"><a href="#cb3-14" aria-hidden="true" tabindex="-1"></a>  <span class="fu">theme_minimal</span>()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </details>
 <div class="cell-output-display">
 <div>
 <figure class="figure">
-<p><img src="project3_files/figure-html/unnamed-chunk-3-1.png" class="img-fluid figure-img" width="672"></p>
+<p><img src="project3_files/figure-html/unnamed-chunk-3-1.png" class="img-fluid figure-img" alt="Bar chart showing the average diabetes mortality (%) across all years for France and the United States." width="672"></p>
 </figure>
 </div>
 </div>
 </div>
-<p><strong>The main variable of interest is the percentage of diabetes mortality rate. While this dataset does not provide a detailed description, we infer that it represents the percentage of deaths in a given year that were attributed to diabetes.</strong></p>
+<p>The main variable of interest is the percentage of diabetes mortality rate. While the dataset doesn’t include a clear statement of what this variable represents, we can infer based on the name of the variable and the dataset itself, that it represents the percentage of deaths in a given year that were attributed to diabetes among all deaths.</p>
 <p>We observe a difference in average mortality rate between the two countries, so now we are going to test if this is a result of the random distribution model, by establishing a null distribution. Instead of comparing only the two countries’ averages, we will repeatedly shuffle the yearly diabetes mortality percentages between the two countries, recompute the average mortality for each country, and record the difference. By repeating this process 1000 times, we can see how large the difference would be between the two countries if we were following the random chance model.</p>
 <div class="cell">
-<details class="code-fold">
-<summary>Code</summary>
-<div class="sourceCode cell-code" id="cb6"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb6-1"><a href="#cb6-1" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(purrr)</span>
-<span id="cb6-2"><a href="#cb6-2" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb6-3"><a href="#cb6-3" aria-hidden="true" tabindex="-1"></a>obs_diff <span class="ot">&lt;-</span> <span class="fu">diff</span>(mortality_avg<span class="sc">$</span>avg_diabetes)</span>
-<span id="cb6-4"><a href="#cb6-4" aria-hidden="true" tabindex="-1"></a>obs_diff</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
-</details>
-<div class="cell-output cell-output-stdout">
-<pre><code>[1] 1.773729</code></pre>
-</div>
-<details class="code-fold">
-<summary>Code</summary>
-<div class="sourceCode cell-code" id="cb8"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb8-1"><a href="#cb8-1" aria-hidden="true" tabindex="-1"></a>perm_data <span class="ot">&lt;-</span> <span class="cf">function</span>(rep, data) {</span>
-<span id="cb8-2"><a href="#cb8-2" aria-hidden="true" tabindex="-1"></a>  data <span class="sc">|&gt;</span></span>
-<span id="cb8-3"><a href="#cb8-3" aria-hidden="true" tabindex="-1"></a>    <span class="fu">select</span>(country, <span class="st">`</span><span class="at">diabetes_pct</span><span class="st">`</span>) <span class="sc">|&gt;</span></span>
-<span id="cb8-4"><a href="#cb8-4" aria-hidden="true" tabindex="-1"></a>    <span class="fu">mutate</span>(<span class="at">diabetes_perm =</span> <span class="fu">sample</span>(<span class="st">`</span><span class="at">diabetes_pct</span><span class="st">`</span>, <span class="at">replace =</span> <span class="cn">FALSE</span>)) <span class="sc">|&gt;</span></span>
-<span id="cb8-5"><a href="#cb8-5" aria-hidden="true" tabindex="-1"></a>    <span class="fu">group_by</span>(country) <span class="sc">|&gt;</span></span>
-<span id="cb8-6"><a href="#cb8-6" aria-hidden="true" tabindex="-1"></a>    <span class="fu">summarize</span>(</span>
-<span id="cb8-7"><a href="#cb8-7" aria-hidden="true" tabindex="-1"></a>      <span class="at">perm_ave =</span> <span class="fu">mean</span>(diabetes_perm)</span>
-<span id="cb8-8"><a href="#cb8-8" aria-hidden="true" tabindex="-1"></a>    ) <span class="sc">|&gt;</span></span>
-<span id="cb8-9"><a href="#cb8-9" aria-hidden="true" tabindex="-1"></a>    <span class="fu">summarize</span>(</span>
-<span id="cb8-10"><a href="#cb8-10" aria-hidden="true" tabindex="-1"></a>      <span class="at">perm_diff =</span> <span class="fu">diff</span>(perm_ave),</span>
-<span id="cb8-11"><a href="#cb8-11" aria-hidden="true" tabindex="-1"></a>      <span class="at">rep =</span> rep</span>
-<span id="cb8-12"><a href="#cb8-12" aria-hidden="true" tabindex="-1"></a>    )</span>
-<span id="cb8-13"><a href="#cb8-13" aria-hidden="true" tabindex="-1"></a>}</span>
-<span id="cb8-14"><a href="#cb8-14" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb8-15"><a href="#cb8-15" aria-hidden="true" tabindex="-1"></a><span class="fu">set.seed</span>(<span class="dv">47</span>)</span>
-<span id="cb8-16"><a href="#cb8-16" aria-hidden="true" tabindex="-1"></a>perm_stats <span class="ot">&lt;-</span> <span class="fu">map</span>(<span class="dv">1</span><span class="sc">:</span><span class="dv">1000</span>, perm_data, <span class="at">data =</span> mortality_filtered) <span class="sc">|&gt;</span></span>
-<span id="cb8-17"><a href="#cb8-17" aria-hidden="true" tabindex="-1"></a>  <span class="fu">list_rbind</span>()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
-</details>
-</div>
-<div class="cell">
-<details class="code-fold">
-<summary>Code</summary>
-<div class="sourceCode cell-code" id="cb9"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb9-1"><a href="#cb9-1" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(ggplot2)</span>
-<span id="cb9-2"><a href="#cb9-2" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb9-3"><a href="#cb9-3" aria-hidden="true" tabindex="-1"></a><span class="fu">ggplot</span>(perm_stats, <span class="fu">aes</span>(<span class="at">x =</span> perm_diff)) <span class="sc">+</span></span>
-<span id="cb9-4"><a href="#cb9-4" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_histogram</span>(<span class="fu">aes</span>(<span class="at">y =</span> ..density..), <span class="at">bins =</span> <span class="dv">30</span>, <span class="at">fill =</span> <span class="st">"pink"</span>, <span class="at">color =</span> <span class="st">"black"</span>, <span class="at">alpha =</span> <span class="fl">0.5</span>) <span class="sc">+</span></span>
-<span id="cb9-5"><a href="#cb9-5" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_vline</span>(<span class="fu">aes</span>(<span class="at">xintercept =</span> obs_diff), <span class="at">color =</span> <span class="st">"red"</span>, <span class="at">linetype =</span> <span class="st">"dashed"</span>, <span class="at">size =</span> <span class="fl">1.2</span>) <span class="sc">+</span></span>
-<span id="cb9-6"><a href="#cb9-6" aria-hidden="true" tabindex="-1"></a>  <span class="fu">labs</span>(<span class="at">title =</span> <span class="st">"Null Distribution of Difference in Diabetes Mortality (%)"</span>,</span>
-<span id="cb9-7"><a href="#cb9-7" aria-hidden="true" tabindex="-1"></a>       <span class="at">subtitle =</span> <span class="st">"France vs United States (All Years)"</span>,</span>
-<span id="cb9-8"><a href="#cb9-8" aria-hidden="true" tabindex="-1"></a>       <span class="at">x =</span> <span class="st">"Difference in Mean Mortality (France - U.S.)"</span>,</span>
-<span id="cb9-9"><a href="#cb9-9" aria-hidden="true" tabindex="-1"></a>       <span class="at">y =</span> <span class="st">"Density"</span>) <span class="sc">+</span></span>
-<span id="cb9-10"><a href="#cb9-10" aria-hidden="true" tabindex="-1"></a>  <span class="fu">theme_minimal</span>()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
-</details>
 <div class="cell-output-display">
 <div>
 <figure class="figure">
-<p><img src="project3_files/figure-html/unnamed-chunk-5-1.png" class="img-fluid figure-img" width="672"></p>
+<p><img src="project3_files/figure-html/unnamed-chunk-4-1.png" class="img-fluid figure-img" alt="Histogram of the null distribution of differences in mean diabetes mortality between France and the US, based on 1000 permutations. The observed difference is marked with a red dashed line." width="672"></p>
 </figure>
 </div>
 </div>
 </div>
-<p>Our p-value is 0, which is less than 0.05 so this is strong evidence to reject our null hypothesis.</p>
-<p>We can reject the hypothesis that the process by which the diabetes mortality rate between France and the United States is generated across all years (1990-2016) is different for each country.</p>
-<p>The permutation test gives a very small p-value, suggesting that the difference in diabetes mortality between the US and France is unlikely to be due to random variation alone.</p>
+<p>This permutation test assesses whether the observed difference in average diabetes mortality between France and the United States is larger than would be expected if the underlying mortality process were the same in both countries. By shuffling the yearly mortality percentages 1,000 times, we generated a null distribution representing the differences we might see due to random yearly fluctuations. The observed difference falls far outside this null distribution (p ≈ 0), providing strong evidence that the underlying process generating diabetes mortality differs between France and the US, not just in the years 1990–2016 but as a general pattern. We can therefore reject the null hypothesis.</p>
 
 
 

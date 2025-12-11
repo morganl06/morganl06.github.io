@@ -1,35 +1,46 @@
 ---
-title: "Cetacean species"
+title: "Cetacean species birth rate over time"
 description: Number of births by Cetacean species per year
   
 author: Morgan L
 date: September 21, 2025
-format: html
+format: 
+  html: 
+    code-fold: TRUE
 ---
 
-This dataset compiles all Cetacean species and their birth information: their birth year, sex, location, mother, father, status, etc. This plot shows the total births per year by species.
+This dataset compiles recorded births for Cetacean species and associated information including their birth year, sex, location, mother, father, status, etc. This plot shows the total births per year grouped by species to highlight long-term trends in population changes.
 
-```{r, echo = FALSE, warning = FALSE, message = FALSE}
+```{r, warning = FALSE, message = FALSE}
+#| fig-alt: "Stacked bar chart showing the number of cetacean births per year from 2000 to 2020. Each color represents a different species, illustrating differences in birth counts across species over time."
 
 library(dplyr)
 library(ggplot2)
 library(readr)
+library(viridis)  # for better contrasting colors
 
+# Load data
 allCetaceanData <- read_csv("allCetaceanData.csv")
 
-allCetaceanData |>
+# Filter for years 2000–2020 and count births per species per year
+cetacean_summary <- allCetaceanData |>
   filter(!is.na(birthYear), birthYear >= 2000, birthYear <= 2020) |>
-  count(birthYear, species) |>
-  ggplot(aes(x = birthYear, y = n, fill = species)) +
-  geom_col(position = "stack") +
+  count(birthYear, species)
+
+# Plot stacked bar chart
+ggplot(cetacean_summary, aes(x = birthYear, y = n, fill = species)) +
+  geom_col(position = "stack") +                     # stack bars by species
   labs(
     x = "Year",
     y = "Number of Births",
-    title = "Cetacean Births by Species (2000–2020)"
+    title = "Cetacean Births by Species (2000–2020)",
+    fill = "Species"
   ) +
-  scale_fill_viridis_d(option = "turbo") +   # better contrasting colors
+  scale_fill_viridis_d(option = "turbo") +          # distinct colors for species
   theme_minimal()
 ```
+
+This stacked bar chart shows the number of cetacean births each year from 2000 to 2020, with each species represented by a different color. Some species have consistently higher birth counts, while others fluctuate more from year to year. For example, there are very many births per year in the Bottlenose species, and very few and inconsistent birth rates in the Atlantic Spotted species.The chart highlights species-level differences in reproduction and provides insight into population trends. These birth trends can inform conservation strategies and help researchers understand patterns in cetacean births over time.
 
 The Cetacean dataset I worked with comes from the TidyTuesday database.
 

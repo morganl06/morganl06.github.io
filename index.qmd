@@ -1,5 +1,5 @@
 ---
-title: "Welcome!"
+title: "Home"
 image: mylo.jpg
 toc: false
 about: 
@@ -11,8 +11,8 @@ about:
       href: https://github.com/morganl06/morganl06.github.io
 ---
 
-This is a Quarto website.
+Hi! Welcome to my website. I'm Morgan, a sophomore at Pomona College. I'm a neuroscience major interested in pursuing a career in healthcare or neuroscience research.
 
-To learn more about Quarto websites visit <https://quarto.org/docs/websites>.
+My website showcases some of my projects and favorite things including wildlife, Netflix shows, and rugby, sport that I play in college.
 
-Hi! Welcome to my website. I'm Morgan, a student at Pomona College and my website showcases some of my favorite things including wildlife, Netflix shows and rugby, sport that I play in college. I'm interested in pursuing a career in healthcare or neuroscience research.
+This is a Quarto website. To learn more about Quarto websites, visit <https://quarto.org/docs/websites>.

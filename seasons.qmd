@@ -1,43 +1,48 @@
 ---
-title: "American Idol Seasons"
+title: "American Idol Seasons Judges Appearances"
 description:
   Frequency of Judge appearances per season
 author: Morgan L
 date: September 21, 2025
-format: html
+format: 
+  html: 
+    code-fold: TRUE
 ---
 
-This dataset compiles the American idol winners and runner ups of the first 18 seasons, as well as release date, judges' names, finals venue, number of episodes of the season, and original network and host. This plot compares judges' appearance across all seasons.
+This dataset compiles the American idol winners and runner ups of the first 18 seasons, as well as release date, judges' names, finals venue, number of episodes of the season, and original network and host. This plot compares judges' appearance across all seasons which helps us understand the structure of the show over time.
 
-```{r, echo = FALSE, warning = FALSE, message = FALSE}
+```{r, warning = FALSE, message = FALSE}
+#| fig-alt: "Heatmap showing which judges appeared in each American Idol season. Each row represents a judge and each column a season; pink tiles indicate the judge was present that season."
+
 library(readr)
 library(dplyr)
 library(tidyr)
 library(ggplot2)
 
+# Load seasons data
 seasons <- read_csv("seasons.csv")
 
-# Split judges into individual names
+# Split judges into individual rows per season
 judge_links <- seasons |>
   select(season, judges) |>
   separate_rows(judges, sep = "; ") |>
   mutate(judges = trimws(judges))
 
-# Make a heatmap
+# Plot heatmap of judge appearances
 ggplot(judge_links, aes(x = factor(season), y = judges)) +
   geom_tile(fill = "pink") +
   theme_minimal() +
   labs(
-    title = "Frequency of Judge appearance per season",
+    title = "Frequency of Judge Appearance per Season",
     x = "Season",
     y = "Judge"
   )
 ```
 
-The American Idol dataset I worked with comes from the TidyTuesday database.
+The heatmap shows which judges appeared in each season of *American Idol*. Each row represents a judge, and each column represents a season. Pink tiles indicate that the judge was present that season. From the plot, we can see that some judges, like Randy Jackson, appear across many seasons, while others, such as Mariah Carey, only appear briefly. This highlights both the continuity and turnover among judges throughout the show’s first 18 seasons, giving insight into how the panel changed over time and how that might have influenced the show’s style and judging dynamics.
 
-\[link\] <https://github.com/rfordatascience/tidytuesday/blob/main/data/2024/2024-07-23/readme.md>
+The American Idol dataset I worked with comes from the TidyTuesday database, at the following link: <https://github.com/rfordatascience/tidytuesday/blob/main/data/2024/2024-07-23/readme.md>
 
 The original dataset comes from Wikipedia.
 
-<https://en.wikipedia.org/wiki/American_Idol>
+*American Idol*. (2025). In *Wikipedia*. <https://en.wikipedia.org/w/index.php?title=American_Idol&oldid=1326137286>
