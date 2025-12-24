@@ -8,7 +8,6 @@ website:
   navbar:
     left:
     - index.qmd
-    - about.qmd
     - text: Data Viz
       menu:
       - whales and dolphins.qmd
